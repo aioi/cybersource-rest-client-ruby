@@ -14,17 +14,25 @@ require 'date'
 
 module CyberSource
   class Riskv1decisionsTravelInformationLegs
-    # Use to specify the airport code for the origin of the leg of the trip, which is designated by the pound (#) symbol in the field name. This code is usually three digits long, for example: SFO = San Francisco. Do not use the colon (:) or the dash (-). For airport codes, see the IATA Airline and Airport Code Search. The leg number can be a positive integer from 0 to N. For example: decision_manager_travel_leg0_orig=SFO decision_manager_travel_leg1_orig=SFO Note In your request, send either the complete route or the individual legs (_leg#_orig and _leg#_dest). If you send all the fields, the complete route takes precedence over the individual legs. 
+    # Use to specify the airport code for the origin of the leg of the trip, which is designated by the pound (#) symbol in the field name. This code is usually three digits long, for example: SFO = San Francisco. Do not use the colon (:) or the dash (-). For airport codes, see the IATA Airline and Airport Code Search. The leg number can be a positive integer from 0 to N. For example: `travelInformation.legs.0.origination=SFO` `travelInformation.legs.1.origination=SFO`  **Note** In your request, send either the complete route or the individual legs (`legs.0.origination` and `legs.n.destination`). If you send all the fields, the complete route takes precedence over the individual legs.  For details, see the `decision_manager_travel_leg#_orig` field description in _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link). 
     attr_accessor :origination
 
-    # Use to specify the airport code for the destination of the leg of the trip, which is designated by the pound (#) symbol in the field name. This code is usually three digits long, for example: SFO = San Francisco. Do not use the colon (:) or the dash (-). For airport codes, see the IATA Airline and Airport Code Search. The leg number can be a positive integer from 0 to N. For example: decision_manager_travel_leg0_dest=SFO decision_manager_travel_leg1_dest=SFO Note In your request, send either the complete route or the individual legs (_leg#_orig and _leg#_dest). If you send all the fields, the complete route takes precedence over the individual legs. 
+    # Use to specify the airport code for the destination of the leg of the trip, which is designated by the pound (#) symbol in the field name. This code is usually three digits long, for example: SFO = San Francisco. Do not use the colon (:) or the dash (-). For airport codes, see [IATA Airline and Airport Code Search](https://www.iata.org/publications/Pages/code-search.aspx). The leg number can be a positive integer from 0 to N. For example:  `travelInformation.legs.0.destination=SFO` `travelInformation.legs.1.destination=SFO`  **Note** In your request, send either the complete route or the individual legs (`legs.0.origination` and `legs.n.destination`). If you send all the fields, the complete route takes precedence over the individual legs.  For details, see the `decision_manager_travel_leg#_dest` field description in _Decision Manager Using the SCMP API Developer Guide_ on the [CyberSource Business Center.](https://ebc2.cybersource.com/ebc2/) Click **Decision Manager** > **Documentation** > **Guides** > _Decision Manager Using the SCMP API Developer Guide_ (PDF link). 
     attr_accessor :destination
+
+    # International Air Transport Association (IATA) code for the carrier for this leg of the trip. Required for each leg. Required for American Express SafeKey (U.S.) for travel-related requests. 
+    attr_accessor :carrier_code
+
+    # Departure date for the first leg of the trip. Format: YYYYMMDD. Required for American Express SafeKey (U.S.) for travel-related requests. 
+    attr_accessor :departure_date
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'origination' => :'origination',
-        :'destination' => :'destination'
+        :'destination' => :'destination',
+        :'carrier_code' => :'carrierCode',
+        :'departure_date' => :'departureDate'
       }
     end
 
@@ -32,7 +40,9 @@ module CyberSource
     def self.swagger_types
       {
         :'origination' => :'String',
-        :'destination' => :'String'
+        :'destination' => :'String',
+        :'carrier_code' => :'String',
+        :'departure_date' => :'String'
       }
     end
 
@@ -51,6 +61,14 @@ module CyberSource
       if attributes.has_key?(:'destination')
         self.destination = attributes[:'destination']
       end
+
+      if attributes.has_key?(:'carrierCode')
+        self.carrier_code = attributes[:'carrierCode']
+      end
+
+      if attributes.has_key?(:'departureDate')
+        self.departure_date = attributes[:'departureDate']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -65,6 +83,10 @@ module CyberSource
         invalid_properties.push('invalid value for "destination", the character length must be smaller than or equal to 3.')
       end
 
+      if !@carrier_code.nil? && @carrier_code.to_s.length > 2
+        invalid_properties.push('invalid value for "carrier_code", the character length must be smaller than or equal to 2.')
+      end
+
       invalid_properties
     end
 
@@ -73,6 +95,7 @@ module CyberSource
     def valid?
       return false if !@origination.nil? && @origination.to_s.length > 3
       return false if !@destination.nil? && @destination.to_s.length > 3
+      return false if !@carrier_code.nil? && @carrier_code.to_s.length > 2
       true
     end
 
@@ -96,13 +119,25 @@ module CyberSource
       @destination = destination
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] carrier_code Value to be assigned
+    def carrier_code=(carrier_code)
+      if !carrier_code.nil? && carrier_code.to_s.length > 2
+        fail ArgumentError, 'invalid value for "carrier_code", the character length must be smaller than or equal to 2.'
+      end
+
+      @carrier_code = carrier_code
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
           origination == o.origination &&
-          destination == o.destination
+          destination == o.destination &&
+          carrier_code == o.carrier_code &&
+          departure_date == o.departure_date
     end
 
     # @see the `==` method
@@ -114,7 +149,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [origination, destination].hash
+      [origination, destination, carrier_code, departure_date].hash
     end
 
     # Builds the object from hash

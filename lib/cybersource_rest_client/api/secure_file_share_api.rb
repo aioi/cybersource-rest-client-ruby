@@ -20,7 +20,7 @@ module CyberSource
       @api_client = api_client
 	  @api_client.set_configuration(config)
     end
-    # Download a file with file identifier
+    # Download a File with File Identifier
     # Download a file for the given file identifier
     # @param file_id Unique identifier for each file
     # @param [Hash] opts the optional parameters
@@ -31,7 +31,7 @@ module CyberSource
       return data, status_code, headers
     end
 
-    # Download a file with file identifier
+    # Download a File with File Identifier
     # Download a file for the given file identifier
     # @param file_id Unique identifier for each file
     # @param [Hash] opts the optional parameters
@@ -99,24 +99,26 @@ module CyberSource
 	  end
       return data, status_code, headers
     end
-    # Get list of files
+    # Get List of Files
     # Get list of files and it's information of them available inside the report directory
-    # @param start_date Valid start date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd 
-    # @param end_date Valid end date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd 
+    # @param start_date Valid start date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)   **Example date format:**   - yyyy-MM-dd 
+    # @param end_date Valid end date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)   **Example date format:**   - yyyy-MM-dd 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :organization_id Valid Cybersource Organization Id
+    # @option opts [String] :name **Tailored to searches for specific files with in given Date range** example : MyTransactionDetailreport.xml 
     # @return [V1FileDetailsGet200Response]
     def get_file_detail(start_date, end_date, opts = {})
       data, status_code, headers = get_file_detail_with_http_info(start_date, end_date, opts)
       return data, status_code, headers
     end
 
-    # Get list of files
+    # Get List of Files
     # Get list of files and it&#39;s information of them available inside the report directory
-    # @param start_date Valid start date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd 
-    # @param end_date Valid end date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd 
+    # @param start_date Valid start date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)   **Example date format:**   - yyyy-MM-dd 
+    # @param end_date Valid end date in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)   **Example date format:**   - yyyy-MM-dd 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :organization_id Valid Cybersource Organization Id
+    # @option opts [String] :name **Tailored to searches for specific files with in given Date range** example : MyTransactionDetailreport.xml 
     # @return [Array<(V1FileDetailsGet200Response, Fixnum, Hash)>] V1FileDetailsGet200Response data, response status code and response headers
     def get_file_detail_with_http_info(start_date, end_date, opts = {})
       
@@ -148,6 +150,10 @@ module CyberSource
         #fail ArgumentError, "invalid value for 'opts[:\"organization_id\"]' when calling SecureFileShareApi.get_file_detail, must conform to the pattern /[a-zA-Z0-9-_]+/."
       #end
 
+      #if @api_client.config.client_side_validation && !opts[:'name'].nil? && opts[:'name'] !~ Regexp.new(/[a-zA-Z0-9-_\\.]+/)
+        #fail ArgumentError, "invalid value for 'opts[:\"name\"]' when calling SecureFileShareApi.get_file_detail, must conform to the pattern /[a-zA-Z0-9-_\\.]+/."
+      #end
+
       # resource path
       local_var_path = 'sfs/v1/file-details'
 
@@ -156,6 +162,7 @@ module CyberSource
       query_params[:'startDate'] = start_date
       query_params[:'endDate'] = end_date
       query_params[:'organizationId'] = opts[:'organization_id'] if !opts[:'organization_id'].nil?
+      query_params[:'name'] = opts[:'name'] if !opts[:'name'].nil?
 
       # header parameters
       header_params = {}

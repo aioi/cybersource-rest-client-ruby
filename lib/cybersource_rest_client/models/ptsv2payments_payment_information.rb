@@ -22,7 +22,20 @@ module CyberSource
 
     attr_accessor :customer
 
+    attr_accessor :payment_instrument
+
+    attr_accessor :instrument_identifier
+
+    attr_accessor :shipping_address
+
+    attr_accessor :legacy_token
+
     attr_accessor :bank
+
+    attr_accessor :payment_type
+
+    # Mastercard-defined code that indicates how the account information was obtained.  - `00` (default): Card - `01`: Removable secure element that is personalized for use with a mobile phone and controlled by the wireless service provider; examples: subscriber identity module (SIM), universal integrated circuit card (UICC) - `02`: Key fob - `03`: Watch - `04`: Mobile tag - `05`: Wristband - `06`: Mobile phone case or sleeve - `07`: Mobile phone with a non-removable, secure element that is controlled by the wireless service provider; for example, code division multiple access (CDMA) - `08`: Removable secure element that is personalized for use with a mobile phone and not controlled by the wireless service provider; example: memory card - `09`: Mobile phone with a non-removable, secure element that is not controlled by the wireless service provider - `10`: Removable secure element that is personalized for use with a tablet or e-book and is controlled by the wireless service provider; examples: subscriber identity module (SIM), universal integrated circuit card (UICC) - `11`: Tablet or e-book with a non-removable, secure element that is controlled by the wireless service provider - `12`: Removable secure element that is personalized for use with a tablet or e-book and is not controlled by the wireless service provider - `13`: Tablet or e-book with a non-removable, secure element that is not controlled by the wireless service provider  This field is supported only for Mastercard on CyberSource through VisaNet.  #### Used by **Authorization** Optional field. 
+    attr_accessor :initiation_channel
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -31,7 +44,13 @@ module CyberSource
         :'tokenized_card' => :'tokenizedCard',
         :'fluid_data' => :'fluidData',
         :'customer' => :'customer',
-        :'bank' => :'bank'
+        :'payment_instrument' => :'paymentInstrument',
+        :'instrument_identifier' => :'instrumentIdentifier',
+        :'shipping_address' => :'shippingAddress',
+        :'legacy_token' => :'legacyToken',
+        :'bank' => :'bank',
+        :'payment_type' => :'paymentType',
+        :'initiation_channel' => :'initiationChannel'
       }
     end
 
@@ -42,7 +61,13 @@ module CyberSource
         :'tokenized_card' => :'Ptsv2paymentsPaymentInformationTokenizedCard',
         :'fluid_data' => :'Ptsv2paymentsPaymentInformationFluidData',
         :'customer' => :'Ptsv2paymentsPaymentInformationCustomer',
-        :'bank' => :'Ptsv2paymentsPaymentInformationBank'
+        :'payment_instrument' => :'Ptsv2paymentsPaymentInformationPaymentInstrument',
+        :'instrument_identifier' => :'Ptsv2paymentsPaymentInformationInstrumentIdentifier',
+        :'shipping_address' => :'Ptsv2paymentsPaymentInformationShippingAddress',
+        :'legacy_token' => :'Ptsv2paymentsPaymentInformationLegacyToken',
+        :'bank' => :'Ptsv2paymentsPaymentInformationBank',
+        :'payment_type' => :'Ptsv2paymentsPaymentInformationPaymentType',
+        :'initiation_channel' => :'String'
       }
     end
 
@@ -70,8 +95,32 @@ module CyberSource
         self.customer = attributes[:'customer']
       end
 
+      if attributes.has_key?(:'paymentInstrument')
+        self.payment_instrument = attributes[:'paymentInstrument']
+      end
+
+      if attributes.has_key?(:'instrumentIdentifier')
+        self.instrument_identifier = attributes[:'instrumentIdentifier']
+      end
+
+      if attributes.has_key?(:'shippingAddress')
+        self.shipping_address = attributes[:'shippingAddress']
+      end
+
+      if attributes.has_key?(:'legacyToken')
+        self.legacy_token = attributes[:'legacyToken']
+      end
+
       if attributes.has_key?(:'bank')
         self.bank = attributes[:'bank']
+      end
+
+      if attributes.has_key?(:'paymentType')
+        self.payment_type = attributes[:'paymentType']
+      end
+
+      if attributes.has_key?(:'initiationChannel')
+        self.initiation_channel = attributes[:'initiationChannel']
       end
     end
 
@@ -79,13 +128,28 @@ module CyberSource
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if !@initiation_channel.nil? && @initiation_channel.to_s.length > 2
+        invalid_properties.push('invalid value for "initiation_channel", the character length must be smaller than or equal to 2.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if !@initiation_channel.nil? && @initiation_channel.to_s.length > 2
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] initiation_channel Value to be assigned
+    def initiation_channel=(initiation_channel)
+      if !initiation_channel.nil? && initiation_channel.to_s.length > 2
+        fail ArgumentError, 'invalid value for "initiation_channel", the character length must be smaller than or equal to 2.'
+      end
+
+      @initiation_channel = initiation_channel
     end
 
     # Checks equality by comparing each attribute.
@@ -97,7 +161,13 @@ module CyberSource
           tokenized_card == o.tokenized_card &&
           fluid_data == o.fluid_data &&
           customer == o.customer &&
-          bank == o.bank
+          payment_instrument == o.payment_instrument &&
+          instrument_identifier == o.instrument_identifier &&
+          shipping_address == o.shipping_address &&
+          legacy_token == o.legacy_token &&
+          bank == o.bank &&
+          payment_type == o.payment_type &&
+          initiation_channel == o.initiation_channel
     end
 
     # @see the `==` method
@@ -109,7 +179,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [card, tokenized_card, fluid_data, customer, bank].hash
+      [card, tokenized_card, fluid_data, customer, payment_instrument, instrument_identifier, shipping_address, legacy_token, bank, payment_type, initiation_channel].hash
     end
 
     # Builds the object from hash

@@ -16,7 +16,7 @@ module CyberSource
   class Ptsv2paymentsidreversalsReversalInformation
     attr_accessor :amount_details
 
-    # Reason for the authorization reversal. Possible value:   - 34: Suspected fraud  CyberSource ignores this field for processors that do not support this value. 
+    # Reason for the authorization reversal. Possible value:   - `34`: Suspected fraud  This field is ignored for processors that do not support this value.  Returned by authorization reversal. 
     attr_accessor :reason
 
     # Attribute mapping from ruby-style variable name to JSON key.

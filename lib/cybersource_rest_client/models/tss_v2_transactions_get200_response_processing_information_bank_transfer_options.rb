@@ -14,7 +14,7 @@ require 'date'
 
 module CyberSource
   class TssV2TransactionsGet200ResponseProcessingInformationBankTransferOptions
-    # The description for this field is not available.
+    # Specifies the authorization method for the transaction.  Possible values: - `ARC`: account receivable conversion - `CCD`: corporate cash disbursement - `POP`: point of purchase conversion - `PPD`: prearranged payment and deposit entry - `TEL`: telephone-initiated entry - `WEB`: internet-initiated entry 
     attr_accessor :sec_code
 
     # Attribute mapping from ruby-style variable name to JSON key.

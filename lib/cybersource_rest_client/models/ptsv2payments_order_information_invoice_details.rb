@@ -23,34 +23,40 @@ module CyberSource
     # Expiration Date.
     attr_accessor :expiration_date
 
-    # Value used by your customer to identify the order. This value is typically a purchase order number. CyberSource recommends that you do not populate the field with all zeros or nines.  For processor-specific information, see the user_po field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
+    # Value used by your customer to identify the order. This value is typically a purchase order number. CyberSource recommends that you do not populate the field with all zeros or nines.  For processor-specific information, see the `user_po` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
     attr_accessor :purchase_order_number
 
-    # Date the order was processed. `Format: YYYY-MM-DD`.  For processor-specific information, see the purchaser_order_date field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
+    # Date the order was processed. `Format: YYYY-MM-DD`.  For processor-specific information, see the `purchaser_order_date` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
     attr_accessor :purchase_order_date
 
-    # The name of the individual or the company contacted for company authorized purchases.  For processor-specific information, see the authorized_contact_name field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
+    # The name of the individual or the company contacted for company authorized purchases.  For processor-specific information, see the `authorized_contact_name` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
     attr_accessor :purchase_contact_name
 
-    # Flag that indicates whether an order is taxable. This value must be true if the sum of all _lineItems[].taxAmount_ values > 0.  If you do not include any _lineItems[].taxAmount_ values in your request, CyberSource does not include _invoiceDetails.taxable_ in the data it sends to the processor.  For processor-specific information, see the tax_indicator field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html)  Possible values:  - **true**  - **false** 
+    # Flag that indicates whether an order is taxable. This value must be true if the sum of all _lineItems[].taxAmount_ values > 0.  If you do not include any `lineItems[].taxAmount` values in your request, CyberSource does not include `invoiceDetails.taxable` in the data it sends to the processor.  For processor-specific information, see the `tax_indicator` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html)  Possible values:  - **true**  - **false** 
     attr_accessor :taxable
 
-    # VAT invoice number associated with the transaction.  For processor-specific information, see the vat_invoice_ref_number field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
+    # VAT invoice number associated with the transaction.  For processor-specific information, see the `vat_invoice_ref_number` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
     attr_accessor :vat_invoice_reference_number
 
-    # International description code of the overall order’s goods or services or the Categorizes purchases for VAT reporting. Contact your acquirer for a list of codes.  For processor-specific information, see the summary_commodity_code field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
+    # International description code of the overall order’s goods or services or the Categorizes purchases for VAT reporting. Contact your acquirer for a list of codes.  For processor-specific information, see the `summary_commodity_code` field in [Level II and Level III Processing Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html) 
     attr_accessor :commodity_code
 
-    # Identifier for the merchandise. Possible value:   - 1000: Gift card  This field is supported only for **American Express Direct**. 
+    # Identifier for the merchandise. This field is supported only on the processors listed in this field description.  #### American Express Direct Possible value: - 1000: Gift card  #### CyberSource through VisaNet This value must be right justified. In Japan, this value is called a _goods code_.  #### JCN Gateway This value must be right justified. In Japan, this value is called a _goods code_. 
     attr_accessor :merchandise_code
 
     attr_accessor :transaction_advice_addendum
 
-    # Code that identifies the value of the reference_data_number field. For the possible values, see Reference Data Codes.  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
+    # Code that identifies the value of the `referenceDataNumber` field.  For the possible values, see \"Reference Data Codes\" in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/).  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
     attr_accessor :reference_data_code
 
-    # Reference number. The meaning of this value is identified by the value of the referenceDataCode field.  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
+    # Reference number. The meaning of this value is identified by the value of the `referenceDataCode` field.  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
     attr_accessor :reference_data_number
+
+    # Transaction identifier that is generated. You have the option of printing the sales slip number on the receipt. This field is supported only on Cybersource through Visanet and JCN gateway.  Optional field.  #### Card Present processing message If you included this field in the request, the returned value is the value that you sent in the request. If you did not include this field in the request, the system generated this value for you.  The difference between this reply field and the `processorInformation.systemTraceAuditNumber` field is that the system generates the system trace audit number (STAN), and you must print the receipt number on the receipt; whereas you can generate the sales slip number, and you can choose to print the sales slip number on the receipt. 
+    attr_accessor :sales_slip_number
+
+    # Date of the tax calculation. Use format YYYYMMDD. You can provide a date in the past if you are calculating tax for a refund and want to know what the tax was on the date the order was placed. You can provide a date in the future if you are calculating the tax for a future date, such as an upcoming tax holiday.  The default is the date, in Pacific time, that the bank receives the request. Keep this in mind if you are in a different time zone and want the tax calculated with the rates that are applicable on a specific date.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes. 
+    attr_accessor :invoice_date
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -67,7 +73,9 @@ module CyberSource
         :'merchandise_code' => :'merchandiseCode',
         :'transaction_advice_addendum' => :'transactionAdviceAddendum',
         :'reference_data_code' => :'referenceDataCode',
-        :'reference_data_number' => :'referenceDataNumber'
+        :'reference_data_number' => :'referenceDataNumber',
+        :'sales_slip_number' => :'salesSlipNumber',
+        :'invoice_date' => :'invoiceDate'
       }
     end
 
@@ -83,10 +91,12 @@ module CyberSource
         :'taxable' => :'BOOLEAN',
         :'vat_invoice_reference_number' => :'String',
         :'commodity_code' => :'String',
-        :'merchandise_code' => :'Float',
+        :'merchandise_code' => :'Integer',
         :'transaction_advice_addendum' => :'Array<Ptsv2paymentsOrderInformationInvoiceDetailsTransactionAdviceAddendum>',
         :'reference_data_code' => :'String',
-        :'reference_data_number' => :'String'
+        :'reference_data_number' => :'String',
+        :'sales_slip_number' => :'Integer',
+        :'invoice_date' => :'String'
       }
     end
 
@@ -151,6 +161,14 @@ module CyberSource
       if attributes.has_key?(:'referenceDataNumber')
         self.reference_data_number = attributes[:'referenceDataNumber']
       end
+
+      if attributes.has_key?(:'salesSlipNumber')
+        self.sales_slip_number = attributes[:'salesSlipNumber']
+      end
+
+      if attributes.has_key?(:'invoiceDate')
+        self.invoice_date = attributes[:'invoiceDate']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -185,6 +203,14 @@ module CyberSource
         invalid_properties.push('invalid value for "reference_data_number", the character length must be smaller than or equal to 30.')
       end
 
+      if !@sales_slip_number.nil? && @sales_slip_number > 99999
+        invalid_properties.push('invalid value for "sales_slip_number", must be smaller than or equal to 99999.')
+      end
+
+      if !@invoice_date.nil? && @invoice_date.to_s.length > 8
+        invalid_properties.push('invalid value for "invoice_date", the character length must be smaller than or equal to 8.')
+      end
+
       invalid_properties
     end
 
@@ -198,6 +224,8 @@ module CyberSource
       return false if !@commodity_code.nil? && @commodity_code.to_s.length > 4
       return false if !@reference_data_code.nil? && @reference_data_code.to_s.length > 3
       return false if !@reference_data_number.nil? && @reference_data_number.to_s.length > 30
+      return false if !@sales_slip_number.nil? && @sales_slip_number > 99999
+      return false if !@invoice_date.nil? && @invoice_date.to_s.length > 8
       true
     end
 
@@ -271,6 +299,26 @@ module CyberSource
       @reference_data_number = reference_data_number
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] sales_slip_number Value to be assigned
+    def sales_slip_number=(sales_slip_number)
+      if !sales_slip_number.nil? && sales_slip_number > 99999
+        fail ArgumentError, 'invalid value for "sales_slip_number", must be smaller than or equal to 99999.'
+      end
+
+      @sales_slip_number = sales_slip_number
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] invoice_date Value to be assigned
+    def invoice_date=(invoice_date)
+      if !invoice_date.nil? && invoice_date.to_s.length > 8
+        fail ArgumentError, 'invalid value for "invoice_date", the character length must be smaller than or equal to 8.'
+      end
+
+      @invoice_date = invoice_date
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -288,7 +336,9 @@ module CyberSource
           merchandise_code == o.merchandise_code &&
           transaction_advice_addendum == o.transaction_advice_addendum &&
           reference_data_code == o.reference_data_code &&
-          reference_data_number == o.reference_data_number
+          reference_data_number == o.reference_data_number &&
+          sales_slip_number == o.sales_slip_number &&
+          invoice_date == o.invoice_date
     end
 
     # @see the `==` method
@@ -300,7 +350,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [invoice_number, barcode_number, expiration_date, purchase_order_number, purchase_order_date, purchase_contact_name, taxable, vat_invoice_reference_number, commodity_code, merchandise_code, transaction_advice_addendum, reference_data_code, reference_data_number].hash
+      [invoice_number, barcode_number, expiration_date, purchase_order_number, purchase_order_date, purchase_contact_name, taxable, vat_invoice_reference_number, commodity_code, merchandise_code, transaction_advice_addendum, reference_data_code, reference_data_number, sales_slip_number, invoice_date].hash
     end
 
     # Builds the object from hash

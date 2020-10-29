@@ -14,16 +14,16 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsidrefundsPaymentInformationCard
-    # The customer’s payment card number, also knows as the Primary Account Nunmber (PAN). You can also use this field for encoded account numbers.  For processor-specific information, see the `customer_cc_number` field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # The customer’s payment card number, also known as the Primary Account Number (PAN). You can also use this field for encoded account numbers.  #### FDMS Nashville Required. String (19)  #### GPX Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### All other processors Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting. 
     attr_accessor :number
 
-    # Two-digit month in which the payment card expires.  Format: `MM`.  Valid values: `01` through `12`.  **Barclays and Streamline**\\ For Maestro (UK Domestic) and Maestro (International) cards on Barclays and Streamline, this must be a valid value (`01` through `12`) but is not required to be a valid expiration date. In other words, an expiration date that is in the past does not cause CyberSource to reject your request. However, an invalid expiration date might cause the issuer to reject your request.  **Encoded Account Numbers**\\ For encoded account numbers (_type_=039), if there is no expiration date on the card, use `12`.  For processor-specific information, see the `customer_cc_expmo` field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Two-digit month in which the payment card expires.  Format: `MM`.  Valid values: `01` through `12`. Leading 0 is required.  #### Barclays and Streamline For Maestro (UK Domestic) and Maestro (International) cards on Barclays and Streamline, this must be a valid value (`01` through `12`) but is not required to be a valid expiration date. In other words, an expiration date that is in the past does not cause CyberSource to reject your request. However, an invalid expiration date might cause the issuer to reject your request.  #### Encoded Account Numbers For encoded account numbers (_type_=039), if there is no expiration date on the card, use `12`.  #### FDMS Nashville Required field.  #### GPX Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### All other processors Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting. 
     attr_accessor :expiration_month
 
-    # Four-digit year in which the credit card expires.  Format: `YYYY`.   **Barclays and Streamline**\\ For Maestro (UK Domestic) and Maestro (International) cards on Barclays and Streamline, this must be a valid value (`1900` through `3000`) but is not required to be a valid expiration date. In other words, an expiration date that is in the past does not cause CyberSource to reject your request. However, an invalid expiration date might cause the issuer to reject your request.  **FDC Nashville Global and FDMS South**\\ You can send in 2 digits or 4 digits. If you send in 2 digits, they must be the last 2 digits of the year.  **Encoded Account Numbers**\\ For encoded account numbers (_type_=039), if there is no expiration date on the card, use `2021`.  For processor-specific information, see the `customer_cc_expyr` field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Four-digit year in which the payment card expires.  Format: `YYYY`.  #### Barclays and Streamline For Maestro (UK Domestic) and Maestro (International) cards on Barclays and Streamline, this must be a valid value (`1900` through `3000`) but is not required to be a valid expiration date. In other words, an expiration date that is in the past does not cause CyberSource to reject your request. However, an invalid expiration date might cause the issuer to reject your request.  #### Encoded Account Numbers For encoded account numbers (**_type_**`=039`), if there is no expiration date on the card, use `2021`.  #### FDMS Nashville Required field.  #### FDC Nashville Global and FDMS South You can send in 2 digits or 4 digits. If you send in 2 digits, they must be the last 2 digits of the year.  #### GPX Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### All other processors Required if `pointOfSaleInformation.entryMode=keyed`. However, this field is optional if your account is configured for relaxed requirements for address data and expiration date. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting. 
     attr_accessor :expiration_year
 
-    # Type of card to authorize. - 001 Visa - 002 Mastercard - 003 Amex - 004 Discover - 005: Diners Club - 007: JCB - 024: Maestro (UK Domestic) - 039 Encoded account number - 042: Maestro (International) 
+    # Three-digit value that indicates the card type.  **IMPORTANT** It is strongly recommended that you include the card type field in request messages even if it is optional for your processor and card type. Omitting the card type can cause the transaction to be processed with the wrong card type.  Possible values: - `001`: Visa. For card-present transactions on all processors except SIX, the Visa Electron card type is processed the same way that the Visa debit card is processed. Use card type value `001` for Visa Electron. - `002`: Mastercard, Eurocard[^1], which is a European regional brand of Mastercard. - `003`: American Express - `004`: Discover - `005`: Diners Club - `006`: Carte Blanche[^1] - `007`: JCB[^1] - `014`: Enroute[^1] - `021`: JAL[^1] - `024`: Maestro (UK Domestic)[^1] - `031`: Delta[^1]: Use this value only for Ingenico ePayments. For other processors, use `001` for all Visa card types. - `033`: Visa Electron[^1]. Use this value only for Ingenico ePayments and SIX. For other processors, use `001` for all Visa card types. - `034`: Dankort[^1] - `036`: Cartes Bancaires[^1] - `037`: Carta Si[^1] - `039`: Encoded account number[^1] - `040`: UATP[^1] - `042`: Maestro (International)[^1] - `050`: Hipercard[^2,3] - `051`: Aura - `054`: Elo[^3] - `062`: China UnionPay  [^1]: For this card type, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in your request for an authorization or a stand-alone credit. [^2]: For this card type on Cielo 3.0, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit. This card type is not supported on Cielo 1.5. [^3]: For this card type on Getnet and Rede, you must include the `paymentInformation.card.type` or `paymentInformation.tokenizedCard.type` field in a request for an authorization or a stand-alone credit.  #### Used by **Authorization** Required for Carte Blanche and JCB. Optional for all other card types.  #### Card Present reply This field is included in the reply message when the client software that is installed on the POS terminal uses the token management service (TMS) to retrieve tokenized payment details. You must contact customer support to have your account enabled to receive these fields in the credit reply message.  Returned by the Credit service.  This reply field is only supported by the following processors: - American Express Direct - Credit Mutuel-CIC - FDC Nashville Global - OmniPay Direct - SIX  #### GPX This field only supports transactions from the following card types: - Visa - Mastercard - AMEX - Discover - Diners - JCB - Union Pay International 
     attr_accessor :type
 
     # Identifier for the issuing bank that provided the customer’s encoded account number. Contact your processor for the bank’s ID. 
@@ -38,6 +38,12 @@ module CyberSource
     # Year of the start of the Maestro (UK Domestic) card validity period. Do not include the field, even with a blank value, if the card is not a Maestro (UK Domestic) card. `Format: YYYY`.  **Note** The start date is not required for Maestro (UK Domestic) transactions. 
     attr_accessor :start_year
 
+    # Flag that specifies the type of account associated with the card. The cardholder provides this information during the payment process.  This field is required in the following cases:   - Debit transactions on Cielo and Comercio Latino.   - Transactions with Brazilian-issued cards on CyberSource through VisaNet.   - Applicable only for CyberSource through VisaNet (CtV).      **Note** Combo cards in Brazil contain credit and debit functionality in a single card. Visa systems use a credit bank identification number (BIN) for this type of card. Using the BIN to determine whether a card is debit or credit can cause transactions with these cards to be processed incorrectly. CyberSource strongly recommends that you include this field for combo card transactions.  Possible values include the following.   - `CHECKING`: Checking account  - `CREDIT`: Credit card account  - `SAVING`: Saving account  - `LINE_OF_CREDIT`: Line of credit or credit portion of combo card  - `PREPAID`: Prepaid card account or prepaid portion of combo card  - `UNIVERSAL`: Universal account 
+    attr_accessor :source_account_type
+
+    # Type of account that is being used when the value for the override_payment_method field is line of credit (LI) or prepaid card (PP). Possible values for line of credit: - `AGRC`: Visa Agro Custeio - `AGRE`: Visa Agro Electron - `AGRI`: Visa Agro Investimento - `AGRO`: Visa Agro Possible values for prepaid card: - `VVA`: Visa Vale Alimentacao - `VVF`: Visa Vale Flex - `VVR`: Visa Vale Refeicao This field is supported only for combo card transactions in Brazil on CyberSource through VisaNet. 
+    attr_accessor :source_account_type_details
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -48,7 +54,9 @@ module CyberSource
         :'account_encoder_id' => :'accountEncoderId',
         :'issue_number' => :'issueNumber',
         :'start_month' => :'startMonth',
-        :'start_year' => :'startYear'
+        :'start_year' => :'startYear',
+        :'source_account_type' => :'sourceAccountType',
+        :'source_account_type_details' => :'sourceAccountTypeDetails'
       }
     end
 
@@ -62,7 +70,9 @@ module CyberSource
         :'account_encoder_id' => :'String',
         :'issue_number' => :'String',
         :'start_month' => :'String',
-        :'start_year' => :'String'
+        :'start_year' => :'String',
+        :'source_account_type' => :'String',
+        :'source_account_type_details' => :'String'
       }
     end
 
@@ -105,6 +115,14 @@ module CyberSource
       if attributes.has_key?(:'startYear')
         self.start_year = attributes[:'startYear']
       end
+
+      if attributes.has_key?(:'sourceAccountType')
+        self.source_account_type = attributes[:'sourceAccountType']
+      end
+
+      if attributes.has_key?(:'sourceAccountTypeDetails')
+        self.source_account_type_details = attributes[:'sourceAccountTypeDetails']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -139,6 +157,14 @@ module CyberSource
         invalid_properties.push('invalid value for "start_year", the character length must be smaller than or equal to 4.')
       end
 
+      if !@source_account_type.nil? && @source_account_type.to_s.length > 20
+        invalid_properties.push('invalid value for "source_account_type", the character length must be smaller than or equal to 20.')
+      end
+
+      if !@source_account_type_details.nil? && @source_account_type_details.to_s.length > 4
+        invalid_properties.push('invalid value for "source_account_type_details", the character length must be smaller than or equal to 4.')
+      end
+
       invalid_properties
     end
 
@@ -152,6 +178,8 @@ module CyberSource
       return false if !@issue_number.nil? && @issue_number.to_s.length > 5
       return false if !@start_month.nil? && @start_month.to_s.length > 2
       return false if !@start_year.nil? && @start_year.to_s.length > 4
+      return false if !@source_account_type.nil? && @source_account_type.to_s.length > 20
+      return false if !@source_account_type_details.nil? && @source_account_type_details.to_s.length > 4
       true
     end
 
@@ -225,6 +253,26 @@ module CyberSource
       @start_year = start_year
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] source_account_type Value to be assigned
+    def source_account_type=(source_account_type)
+      if !source_account_type.nil? && source_account_type.to_s.length > 20
+        fail ArgumentError, 'invalid value for "source_account_type", the character length must be smaller than or equal to 20.'
+      end
+
+      @source_account_type = source_account_type
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] source_account_type_details Value to be assigned
+    def source_account_type_details=(source_account_type_details)
+      if !source_account_type_details.nil? && source_account_type_details.to_s.length > 4
+        fail ArgumentError, 'invalid value for "source_account_type_details", the character length must be smaller than or equal to 4.'
+      end
+
+      @source_account_type_details = source_account_type_details
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -237,7 +285,9 @@ module CyberSource
           account_encoder_id == o.account_encoder_id &&
           issue_number == o.issue_number &&
           start_month == o.start_month &&
-          start_year == o.start_year
+          start_year == o.start_year &&
+          source_account_type == o.source_account_type &&
+          source_account_type_details == o.source_account_type_details
     end
 
     # @see the `==` method
@@ -249,7 +299,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [number, expiration_month, expiration_year, type, account_encoder_id, issue_number, start_month, start_year].hash
+      [number, expiration_month, expiration_year, type, account_encoder_id, issue_number, start_month, start_year, source_account_type, source_account_type_details].hash
     end
 
     # Builds the object from hash

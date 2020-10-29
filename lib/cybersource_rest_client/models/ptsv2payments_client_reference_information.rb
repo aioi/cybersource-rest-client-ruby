@@ -14,10 +14,10 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsClientReferenceInformation
-    # Client-generated order reference or tracking number. CyberSource recommends that you send a unique value for each transaction so that you can perform meaningful searches for the transaction.  For information about tracking orders, see [Getting Started with CyberSource Advanced for the SCMP API](http://apps.cybersource.com/library/documentation/dev_guides/Getting_Started_SCMP/html/wwhelp/wwhimpl/js/html/wwhelp.htm).  **FDC Nashville Global**\\ Certain circumstances can cause the processor to truncate this value to 15 or 17 characters for Level II and Level III processing, which can cause a discrepancy between the value you submit and the value included in some processor reports. 
+    # Merchant-generated order reference or tracking number. It is recommended that you send a unique value for each transaction so that you can perform meaningful searches for the transaction.  #### Used by **Authorization** Required field.  #### PIN Debit Requests for PIN debit reversals need to use the same merchant reference number that was used in the transaction that is being reversed.  Required field for all PIN Debit requests (purchase, credit, and reversal).  #### FDC Nashville Global Certain circumstances can cause the processor to truncate this value to 15 or 17 characters for Level II and Level III processing, which can cause a discrepancy between the value you submit and the value included in some processor reports. 
     attr_accessor :code
 
-    # Identifier that you assign to the transaction.  **Note** Use this field only if you want to support merchant-initiated reversal and void operations.  See page 250 on [Merchant-Initiated Reversals and Voids.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SO_API/Credit_Cards_SO_API.pdf) 
+    # Identifier that you assign to the transaction.  **Note** Use this field only if you want to support merchant-initiated reversal and void operations.  #### Used by **Authorization, Authorization Reversal, Capture, Credit, and Void** Optional field.  #### PIN Debit For a PIN debit reversal, your request must include a request ID or a merchant transaction identifier.  Optional field for PIN debit purchase or credit requests. 
     attr_accessor :transaction_id
 
     # Comments
@@ -25,13 +25,25 @@ module CyberSource
 
     attr_accessor :partner
 
+    # The name of the Connection Method client (such as Virtual Terminal or SOAP Toolkit API) that the merchant uses to send a transaction request to CyberSource. 
+    attr_accessor :application_name
+
+    # Version of the CyberSource application or integration used for a transaction. 
+    attr_accessor :application_version
+
+    # The entity that is responsible for running the transaction and submitting the processing request to CyberSource. This could be a person, a system, or a connection method. 
+    attr_accessor :application_user
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'code' => :'code',
         :'transaction_id' => :'transactionId',
         :'comments' => :'comments',
-        :'partner' => :'partner'
+        :'partner' => :'partner',
+        :'application_name' => :'applicationName',
+        :'application_version' => :'applicationVersion',
+        :'application_user' => :'applicationUser'
       }
     end
 
@@ -41,7 +53,10 @@ module CyberSource
         :'code' => :'String',
         :'transaction_id' => :'String',
         :'comments' => :'String',
-        :'partner' => :'Ptsv2paymentsClientReferenceInformationPartner'
+        :'partner' => :'Ptsv2paymentsClientReferenceInformationPartner',
+        :'application_name' => :'String',
+        :'application_version' => :'String',
+        :'application_user' => :'String'
       }
     end
 
@@ -68,6 +83,18 @@ module CyberSource
       if attributes.has_key?(:'partner')
         self.partner = attributes[:'partner']
       end
+
+      if attributes.has_key?(:'applicationName')
+        self.application_name = attributes[:'applicationName']
+      end
+
+      if attributes.has_key?(:'applicationVersion')
+        self.application_version = attributes[:'applicationVersion']
+      end
+
+      if attributes.has_key?(:'applicationUser')
+        self.application_user = attributes[:'applicationUser']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -78,6 +105,10 @@ module CyberSource
         invalid_properties.push('invalid value for "code", the character length must be smaller than or equal to 50.')
       end
 
+      if !@transaction_id.nil? && @transaction_id.to_s.length > 30
+        invalid_properties.push('invalid value for "transaction_id", the character length must be smaller than or equal to 30.')
+      end
+
       invalid_properties
     end
 
@@ -85,6 +116,7 @@ module CyberSource
     # @return true if the model is valid
     def valid?
       return false if !@code.nil? && @code.to_s.length > 50
+      return false if !@transaction_id.nil? && @transaction_id.to_s.length > 30
       true
     end
 
@@ -98,6 +130,16 @@ module CyberSource
       @code = code
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] transaction_id Value to be assigned
+    def transaction_id=(transaction_id)
+      if !transaction_id.nil? && transaction_id.to_s.length > 30
+        fail ArgumentError, 'invalid value for "transaction_id", the character length must be smaller than or equal to 30.'
+      end
+
+      @transaction_id = transaction_id
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -106,7 +148,10 @@ module CyberSource
           code == o.code &&
           transaction_id == o.transaction_id &&
           comments == o.comments &&
-          partner == o.partner
+          partner == o.partner &&
+          application_name == o.application_name &&
+          application_version == o.application_version &&
+          application_user == o.application_user
     end
 
     # @see the `==` method
@@ -118,7 +163,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [code, transaction_id, comments, partner].hash
+      [code, transaction_id, comments, partner, application_name, application_version, application_user].hash
     end
 
     # Builds the object from hash

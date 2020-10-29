@@ -14,10 +14,10 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsOrderInformationBillTo
-    # Customer’s first name. This name must be the same as the name on the card.  **CyberSource Latin American Processing**\\ **Important** For an authorization request, CyberSource Latin American Processing concatenates `orderInformation.billTo.firstName` and `orderInformation.billTo.lastName`. If the concatenated value exceeds 30 characters, CyberSource Latin American Processing declines the authorization request.\\ **Note** CyberSource Latin American Processing is the name of a specific processing connection that CyberSource supports. In the CyberSource API documentation, CyberSource Latin American Processing does not refer to the general topic of processing in Latin America. The information in this field description is for the specific processing connection called CyberSource Latin American Processing. It is not for any other Latin American processors that CyberSource supports.  **CyberSource through VisaNet**\\ Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **For Payouts**:\\ This field may be sent only for FDC Compass.  ccAuthService\\ (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the customer_firstname field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Customer’s first name. This name must be the same as the name on the card.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### CyberSource Latin American Processing **Important** For an authorization request, CyberSource Latin American Processing concatenates `orderInformation.billTo.firstName` and `orderInformation.billTo.lastName`. If the concatenated value exceeds 30 characters, CyberSource Latin American Processing declines the authorization request.\\ **Note** CyberSource Latin American Processing is the name of a specific processing connection that CyberSource supports. In the CyberSource API documentation, CyberSource Latin American Processing does not refer to the general topic of processing in Latin America. The information in this field description is for the specific processing connection called _CyberSource Latin American Processing_. It is not for any other Latin American processors that CyberSource supports.  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### For Payouts: This field may be sent only for FDC Compass.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :first_name
 
-    # Customer’s last name. This name must be the same as the name on the card.  **CyberSource Latin American Processing**\\ **Important** For an authorization request, CyberSource Latin American Processing concatenates `orderInformation.billTo.firstName` and `orderInformation.billTo.lastName`. If the concatenated value exceeds 30 characters, CyberSource Latin American Processing declines the authorization request.\\ **Note** CyberSource Latin American Processing is the name of a specific processing connection that CyberSource supports. In the CyberSource API documentation, CyberSource Latin American Processing does not refer to the general topic of processing in Latin America. The information in this field description is for the specific processing connection called CyberSource Latin American Processing. It is not for any other Latin American processors that CyberSource supports.  **CyberSource through VisaNet**\\ Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  ccAuthService\\ (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  **For Payouts** : This field may be sent only for FDC Compass.  For processor-specific information, see the customer_lastname field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Customer’s last name. This name must be the same as the name on the card.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### CyberSource Latin American Processing **Important** For an authorization request, CyberSource Latin American Processing concatenates `orderInformation.billTo.firstName` and `orderInformation.billTo.lastName`. If the concatenated value exceeds 30 characters, CyberSource Latin American Processing declines the authorization request.\\ **Note** CyberSource Latin American Processing is the name of a specific processing connection that CyberSource supports. In the CyberSource API documentation, CyberSource Latin American Processing does not refer to the general topic of processing in Latin America. The information in this field description is for the specific processing connection called CyberSource Latin American Processing. It is not for any other Latin American processors that CyberSource supports.  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### For Payouts: This field may be sent only for FDC Compass.  #### OmniPay Direct Optional field.  #### RBS WorldPay Atlanta Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :last_name
 
     # Customer’s middle name. 
@@ -31,22 +31,28 @@ module CyberSource
 
     attr_accessor :company
 
-    # First line of the billing street address as it appears on the credit card issuer’s records.  **Atos** This field must not contain colons (:).  **CyberSource through VisaNet** **Important** When you populate billing street address 1 and billing street address 2, CyberSource through VisaNet concatenates the two values. If the concatenated value exceeds 40 characters, CyberSource through VisaNet truncates the value at 40 characters before sending it to Visa and the issuing bank. Truncating this value affects AVS results and therefore might also affect risk decisions and chargebacks. Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **For Payouts**: This field may be sent only for FDC Compass.  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the bill_address1 field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Payment card billing street address as it appears on the credit card issuer’s records.  #### Atos This field must not contain colons (:).  #### CyberSource through VisaNet **Important** When you populate orderInformation.billTo.address1 and orderInformation.billTo.address2, CyberSource through VisaNet concatenates the two values. If the concatenated value exceeds 40 characters, CyberSource through VisaNet truncates the value at 40 characters before sending it to Visa and the issuing bank. Truncating this value affects AVS results and therefore might also affect risk decisions and chargebacks. Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### FDMS Nashville When the street name is numeric, it must be sent in numeric format. For example, if the address is _One First Street_, it must be sent as _1 1st Street_.  Required if keyed; not used if swiped.  String (20)  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### All other processors: Optional. String (60)  #### For Payouts This field may be sent only for FDC Compass.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting. 
     attr_accessor :address1
 
-    # Additional address information.  For Payouts: This field may be sent only for FDC Compass.  **Atos** This field must not contain colons (:).  **Chase Paymentech Solutions, FDC Compass, and TSYS Acquiring Solutions** This value is used for AVS.  **CyberSource through VisaNet** **Important** When you populate billing street address 1 and billing street address 2, CyberSource through VisaNet concatenates the two values. If the concatenated value exceeds 40 characters, CyberSource through VisaNet truncates the value at 40 characters before sending it to Visa and the issuing bank. Truncating this value affects AVS results and therefore might also affect risk decisions and chargebacks. Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  For processor-specific information, see the bill_address2 field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Used for additional address information. For example: _Attention: Accounts Payable_ Optional field.  For Payouts: This field may be sent only for FDC Compass.  #### Atos This field must not contain colons (:).  #### CyberSource through VisaNet **Important** When you populate `orderInformation.billTo.address1` and `orderInformation.billTo.address2`, CyberSource through VisaNet concatenates the two values. If the concatenated value exceeds 40 characters, CyberSource through VisaNet truncates the value at 40 characters before sending it to Visa and the issuing bank. Truncating this value affects AVS results and therefore might also affect risk decisions and chargebacks. Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### Chase Paymentech Solutions, FDC Compass, and TSYS Acquiring Solutions This value is used for AVS.  #### FDMS Nashville `orderInformation.billTo.address1` and `orderInformation.billTo.address2` together cannot exceed 20 characters. String (20)  #### All Other Processors String (60) 
     attr_accessor :address2
 
-    # City of the billing address.  **Atos** This field must not contain colons (:).  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **For Payouts**: This field may be sent only for FDC Compass.  For processor-specific information, see the bill_city field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Additional address information (third line of the billing address) 
+    attr_accessor :address3
+
+    # Additional address information (fourth line of the billing address) 
+    attr_accessor :address4
+
+    # Payment card billing city.  #### Atos This field must not contain colons (:).  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### For Payouts: This field may be sent only for FDC Compass.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :locality
 
-    # State or province of the billing address. Use the State, Province, and Territory Codes for the United States and Canada.  For Payouts: This field may be sent only for FDC Compass.  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the bill_state field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # State or province of the billing address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  For Payouts: This field may be sent only for FDC Compass.  ##### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :administrative_area
 
-    # Postal code for the billing address. The postal code must consist of 5 to 9 digits.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  Example 12345-6789  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  Example A1B 2C3  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  For Payouts: This field may be sent only for FDC Compass.  **American Express Direct** Before sending the postal code to the processor, CyberSource removes all nonalphanumeric characters and, if the remaining value is longer than nine characters, truncates the value starting from the right side.  **Atos** This field must not contain colons (:).  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  For processor-specific information, see the bill_zip field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Postal code for the billing address. The postal code must consist of 5 to 9 digits.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  **Example** `12345-6789`  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  **Example** `A1B 2C3`  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### For Payouts:  This field may be sent only for FDC Compass.  #### American Express Direct Before sending the postal code to the processor, CyberSource removes all nonalphanumeric characters and, if the remaining value is longer than nine characters, truncates the value starting from the right side.  #### Atos This field must not contain colons (:).  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### FDMS Nashville Required if `pointOfSaleInformation.entryMode=keyed` and the address is in the U.S. or Canada. Optional if `pointOfSaleInformation.entryMode=keyed` and the address is **not** in the U.S. or Canada. Not used if swiped.  #### RBS WorldPay Atlanta: For best card-present keyed rates, send the postal code if `pointOfSaleInformation.entryMode=keyed`.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### All other processors: Optional field. 
     attr_accessor :postal_code
 
-    # Country of the billing address. Use the two-character ISO Standard Country Codes.  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the bill_country field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Payment card billing country. Use the two-character [ISO Standard Country Codes](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf).  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :country
 
     # Customer’s neighborhood, community, or region (a barrio in Brazil) within the city or municipality. This field is available only on **Cielo**. 
@@ -55,36 +61,17 @@ module CyberSource
     # Building number in the street address.  For example, if the street address is: Rua da Quitanda 187 then the building number is 187.  This field is supported only for:  - Cielo transactions.  - Redecard customer validation with CyberSource Latin American Processing. 
     attr_accessor :building_number
 
-    # Customer's email address, including the full domain name.  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the customer_email field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Customer's email address, including the full domain name.  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the `customer_email` request-level field description in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)  #### Invoicing Email address for the customer for sending the invoice. If the invoice is in SENT status and email is updated, the old email customer payment link won't work and you must resend the invoice with the new payment link.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :email
 
-    # Customer’s phone number.  For Payouts: This field may be sent only for FDC Compass.  CyberSource recommends that you include the country code when the order is from outside the U.S.  For processor-specific information, see the customer_phone field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks. 
+    # Email domain of the customer. The domain of the email address comprises all characters that follow the @ symbol, such as mail.example.com. For the Risk Update service, if the email address and the domain are sent in the request, the domain supersedes the email address. 
+    attr_accessor :email_domain
+
+    # Customer’s phone number.  It is recommended that you include the country code when the order is from outside the U.S.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  #### For Payouts: This field may be sent only for FDC Compass.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Optional field.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :phone_number
 
-    # Customer's phone number type.  For Payouts: This field may be sent only for FDC Compass.  Possible Values -  * day * home * night * work 
+    # Customer's phone number type.  #### For Payouts: This field may be sent only for FDC Compass.  Possible Values: * day * home * night * work 
     attr_accessor :phone_type
-
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -97,6 +84,8 @@ module CyberSource
         :'company' => :'company',
         :'address1' => :'address1',
         :'address2' => :'address2',
+        :'address3' => :'address3',
+        :'address4' => :'address4',
         :'locality' => :'locality',
         :'administrative_area' => :'administrativeArea',
         :'postal_code' => :'postalCode',
@@ -104,6 +93,7 @@ module CyberSource
         :'district' => :'district',
         :'building_number' => :'buildingNumber',
         :'email' => :'email',
+        :'email_domain' => :'emailDomain',
         :'phone_number' => :'phoneNumber',
         :'phone_type' => :'phoneType'
       }
@@ -120,6 +110,8 @@ module CyberSource
         :'company' => :'Ptsv2paymentsOrderInformationBillToCompany',
         :'address1' => :'String',
         :'address2' => :'String',
+        :'address3' => :'String',
+        :'address4' => :'String',
         :'locality' => :'String',
         :'administrative_area' => :'String',
         :'postal_code' => :'String',
@@ -127,6 +119,7 @@ module CyberSource
         :'district' => :'String',
         :'building_number' => :'String',
         :'email' => :'String',
+        :'email_domain' => :'String',
         :'phone_number' => :'String',
         :'phone_type' => :'String'
       }
@@ -172,6 +165,14 @@ module CyberSource
         self.address2 = attributes[:'address2']
       end
 
+      if attributes.has_key?(:'address3')
+        self.address3 = attributes[:'address3']
+      end
+
+      if attributes.has_key?(:'address4')
+        self.address4 = attributes[:'address4']
+      end
+
       if attributes.has_key?(:'locality')
         self.locality = attributes[:'locality']
       end
@@ -198,6 +199,10 @@ module CyberSource
 
       if attributes.has_key?(:'email')
         self.email = attributes[:'email']
+      end
+
+      if attributes.has_key?(:'emailDomain')
+        self.email_domain = attributes[:'emailDomain']
       end
 
       if attributes.has_key?(:'phoneNumber')
@@ -241,12 +246,20 @@ module CyberSource
         invalid_properties.push('invalid value for "address2", the character length must be smaller than or equal to 60.')
       end
 
+      if !@address3.nil? && @address3.to_s.length > 60
+        invalid_properties.push('invalid value for "address3", the character length must be smaller than or equal to 60.')
+      end
+
+      if !@address4.nil? && @address4.to_s.length > 60
+        invalid_properties.push('invalid value for "address4", the character length must be smaller than or equal to 60.')
+      end
+
       if !@locality.nil? && @locality.to_s.length > 50
         invalid_properties.push('invalid value for "locality", the character length must be smaller than or equal to 50.')
       end
 
-      if !@administrative_area.nil? && @administrative_area.to_s.length > 2
-        invalid_properties.push('invalid value for "administrative_area", the character length must be smaller than or equal to 2.')
+      if !@administrative_area.nil? && @administrative_area.to_s.length > 20
+        invalid_properties.push('invalid value for "administrative_area", the character length must be smaller than or equal to 20.')
       end
 
       if !@postal_code.nil? && @postal_code.to_s.length > 10
@@ -269,6 +282,10 @@ module CyberSource
         invalid_properties.push('invalid value for "email", the character length must be smaller than or equal to 255.')
       end
 
+      if !@email_domain.nil? && @email_domain.to_s.length > 100
+        invalid_properties.push('invalid value for "email_domain", the character length must be smaller than or equal to 100.')
+      end
+
       if !@phone_number.nil? && @phone_number.to_s.length > 15
         invalid_properties.push('invalid value for "phone_number", the character length must be smaller than or equal to 15.')
       end
@@ -286,16 +303,17 @@ module CyberSource
       return false if !@title.nil? && @title.to_s.length > 60
       return false if !@address1.nil? && @address1.to_s.length > 60
       return false if !@address2.nil? && @address2.to_s.length > 60
+      return false if !@address3.nil? && @address3.to_s.length > 60
+      return false if !@address4.nil? && @address4.to_s.length > 60
       return false if !@locality.nil? && @locality.to_s.length > 50
-      return false if !@administrative_area.nil? && @administrative_area.to_s.length > 2
+      return false if !@administrative_area.nil? && @administrative_area.to_s.length > 20
       return false if !@postal_code.nil? && @postal_code.to_s.length > 10
       return false if !@country.nil? && @country.to_s.length > 2
       return false if !@district.nil? && @district.to_s.length > 50
       return false if !@building_number.nil? && @building_number.to_s.length > 256
       return false if !@email.nil? && @email.to_s.length > 255
+      return false if !@email_domain.nil? && @email_domain.to_s.length > 100
       return false if !@phone_number.nil? && @phone_number.to_s.length > 15
-      phone_type_validator = EnumAttributeValidator.new('String', ['day', 'home', 'night', 'work'])
-      return false unless phone_type_validator.valid?(@phone_type)
       true
     end
 
@@ -370,6 +388,26 @@ module CyberSource
     end
 
     # Custom attribute writer method with validation
+    # @param [Object] address3 Value to be assigned
+    def address3=(address3)
+      if !address3.nil? && address3.to_s.length > 60
+        fail ArgumentError, 'invalid value for "address3", the character length must be smaller than or equal to 60.'
+      end
+
+      @address3 = address3
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] address4 Value to be assigned
+    def address4=(address4)
+      if !address4.nil? && address4.to_s.length > 60
+        fail ArgumentError, 'invalid value for "address4", the character length must be smaller than or equal to 60.'
+      end
+
+      @address4 = address4
+    end
+
+    # Custom attribute writer method with validation
     # @param [Object] locality Value to be assigned
     def locality=(locality)
       if !locality.nil? && locality.to_s.length > 50
@@ -382,8 +420,8 @@ module CyberSource
     # Custom attribute writer method with validation
     # @param [Object] administrative_area Value to be assigned
     def administrative_area=(administrative_area)
-      if !administrative_area.nil? && administrative_area.to_s.length > 2
-        fail ArgumentError, 'invalid value for "administrative_area", the character length must be smaller than or equal to 2.'
+      if !administrative_area.nil? && administrative_area.to_s.length > 20
+        fail ArgumentError, 'invalid value for "administrative_area", the character length must be smaller than or equal to 20.'
       end
 
       @administrative_area = administrative_area
@@ -440,6 +478,16 @@ module CyberSource
     end
 
     # Custom attribute writer method with validation
+    # @param [Object] email_domain Value to be assigned
+    def email_domain=(email_domain)
+      if !email_domain.nil? && email_domain.to_s.length > 100
+        fail ArgumentError, 'invalid value for "email_domain", the character length must be smaller than or equal to 100.'
+      end
+
+      @email_domain = email_domain
+    end
+
+    # Custom attribute writer method with validation
     # @param [Object] phone_number Value to be assigned
     def phone_number=(phone_number)
       if !phone_number.nil? && phone_number.to_s.length > 15
@@ -447,16 +495,6 @@ module CyberSource
       end
 
       @phone_number = phone_number
-    end
-
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] phone_type Object to be assigned
-    def phone_type=(phone_type)
-      validator = EnumAttributeValidator.new('String', ['day', 'home', 'night', 'work'])
-      unless validator.valid?(phone_type)
-        fail ArgumentError, 'invalid value for "phone_type", must be one of #{validator.allowable_values}.'
-      end
-      @phone_type = phone_type
     end
 
     # Checks equality by comparing each attribute.
@@ -472,6 +510,8 @@ module CyberSource
           company == o.company &&
           address1 == o.address1 &&
           address2 == o.address2 &&
+          address3 == o.address3 &&
+          address4 == o.address4 &&
           locality == o.locality &&
           administrative_area == o.administrative_area &&
           postal_code == o.postal_code &&
@@ -479,6 +519,7 @@ module CyberSource
           district == o.district &&
           building_number == o.building_number &&
           email == o.email &&
+          email_domain == o.email_domain &&
           phone_number == o.phone_number &&
           phone_type == o.phone_type
     end
@@ -492,7 +533,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [first_name, last_name, middle_name, name_suffix, title, company, address1, address2, locality, administrative_area, postal_code, country, district, building_number, email, phone_number, phone_type].hash
+      [first_name, last_name, middle_name, name_suffix, title, company, address1, address2, address3, address4, locality, administrative_area, postal_code, country, district, building_number, email, email_domain, phone_number, phone_type].hash
     end
 
     # Builds the object from hash

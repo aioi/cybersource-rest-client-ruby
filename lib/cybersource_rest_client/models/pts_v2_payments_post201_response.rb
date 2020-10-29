@@ -16,16 +16,16 @@ module CyberSource
   class PtsV2PaymentsPost201Response
     attr_accessor :_links
 
-    # An unique identification number assigned by CyberSource to identify the submitted request. It is also appended to the endpoint of the resource.
+    # An unique identification number to identify the submitted request. It is also appended to the endpoint of the resource.  On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.  #### PIN debit Returned for all PIN debit services. 
     attr_accessor :id
 
-    # Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` Example `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC. 
+    # Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by authorization service.  #### PIN debit Time when the PIN debit credit, PIN debit purchase or PIN debit reversal was requested.  Returned by PIN debit credit, PIN debit purchase or PIN debit reversal. 
     attr_accessor :submit_time_utc
 
-    # The status of the submitted transaction.  Possible values:  - AUTHORIZED  - PARTIAL_AUTHORIZED  - AUTHORIZED_PENDING_REVIEW  - DECLINED  - INVALID_REQUEST 
+    # The status of the submitted transaction.  Possible values:  - AUTHORIZED  - PARTIAL_AUTHORIZED  - AUTHORIZED_PENDING_REVIEW  - AUTHORIZED_RISK_DECLINED  - PENDING_AUTHENTICATION  - PENDING_REVIEW  - DECLINED  - INVALID_REQUEST 
     attr_accessor :status
 
-    # The reconciliation id for the submitted transaction. This value is not returned for all processors. 
+    # Reference number for the transaction. This value is not returned for all processors.  Returned by authorization service.  ##### PIN debit Returned by PIN debit credit, PIN debit purchase, and PIN debit reversal.  #### Atos Positive string (6)  #### All other processors String (60) 
     attr_accessor :reconciliation_id
 
     attr_accessor :error_information
@@ -46,27 +46,11 @@ module CyberSource
 
     attr_accessor :installment_information
 
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
+    attr_accessor :token_information
 
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
+    attr_accessor :risk_information
 
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
+    attr_accessor :consumer_authentication_information
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -84,7 +68,10 @@ module CyberSource
         :'payment_information' => :'paymentInformation',
         :'order_information' => :'orderInformation',
         :'point_of_sale_information' => :'pointOfSaleInformation',
-        :'installment_information' => :'installmentInformation'
+        :'installment_information' => :'installmentInformation',
+        :'token_information' => :'tokenInformation',
+        :'risk_information' => :'riskInformation',
+        :'consumer_authentication_information' => :'consumerAuthenticationInformation'
       }
     end
 
@@ -104,7 +91,10 @@ module CyberSource
         :'payment_information' => :'PtsV2PaymentsPost201ResponsePaymentInformation',
         :'order_information' => :'PtsV2PaymentsPost201ResponseOrderInformation',
         :'point_of_sale_information' => :'PtsV2PaymentsPost201ResponsePointOfSaleInformation',
-        :'installment_information' => :'PtsV2PaymentsPost201ResponseInstallmentInformation'
+        :'installment_information' => :'PtsV2PaymentsPost201ResponseInstallmentInformation',
+        :'token_information' => :'PtsV2PaymentsPost201ResponseTokenInformation',
+        :'risk_information' => :'PtsV2PaymentsPost201ResponseRiskInformation',
+        :'consumer_authentication_information' => :'PtsV2PaymentsPost201ResponseConsumerAuthenticationInformation'
       }
     end
 
@@ -171,6 +161,18 @@ module CyberSource
       if attributes.has_key?(:'installmentInformation')
         self.installment_information = attributes[:'installmentInformation']
       end
+
+      if attributes.has_key?(:'tokenInformation')
+        self.token_information = attributes[:'tokenInformation']
+      end
+
+      if attributes.has_key?(:'riskInformation')
+        self.risk_information = attributes[:'riskInformation']
+      end
+
+      if attributes.has_key?(:'consumerAuthenticationInformation')
+        self.consumer_authentication_information = attributes[:'consumerAuthenticationInformation']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -192,8 +194,6 @@ module CyberSource
     # @return true if the model is valid
     def valid?
       return false if !@id.nil? && @id.to_s.length > 26
-      status_validator = EnumAttributeValidator.new('String', ['AUTHORIZED', 'PARTIAL_AUTHORIZED', 'AUTHORIZED_PENDING_REVIEW', 'DECLINED', 'INVALID_REQUEST', 'PENDING'])
-      return false unless status_validator.valid?(@status)
       return false if !@reconciliation_id.nil? && @reconciliation_id.to_s.length > 60
       true
     end
@@ -206,16 +206,6 @@ module CyberSource
       end
 
       @id = id
-    end
-
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] status Object to be assigned
-    def status=(status)
-      validator = EnumAttributeValidator.new('String', ['AUTHORIZED', 'PARTIAL_AUTHORIZED', 'AUTHORIZED_PENDING_REVIEW', 'DECLINED', 'INVALID_REQUEST', 'PENDING'])
-      unless validator.valid?(status)
-        fail ArgumentError, 'invalid value for "status", must be one of #{validator.allowable_values}.'
-      end
-      @status = status
     end
 
     # Custom attribute writer method with validation
@@ -246,7 +236,10 @@ module CyberSource
           payment_information == o.payment_information &&
           order_information == o.order_information &&
           point_of_sale_information == o.point_of_sale_information &&
-          installment_information == o.installment_information
+          installment_information == o.installment_information &&
+          token_information == o.token_information &&
+          risk_information == o.risk_information &&
+          consumer_authentication_information == o.consumer_authentication_information
     end
 
     # @see the `==` method
@@ -258,7 +251,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [_links, id, submit_time_utc, status, reconciliation_id, error_information, client_reference_information, processing_information, processor_information, issuer_information, payment_information, order_information, point_of_sale_information, installment_information].hash
+      [_links, id, submit_time_utc, status, reconciliation_id, error_information, client_reference_information, processing_information, processor_information, issuer_information, payment_information, order_information, point_of_sale_information, installment_information, token_information, risk_information, consumer_authentication_information].hash
     end
 
     # Builds the object from hash

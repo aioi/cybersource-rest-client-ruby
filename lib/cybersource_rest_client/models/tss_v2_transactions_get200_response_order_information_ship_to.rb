@@ -14,31 +14,31 @@ require 'date'
 
 module CyberSource
   class TssV2TransactionsGet200ResponseOrderInformationShipTo
-    # First name of the recipient.  **Processor specific maximum length**  - Litle: 25 - All other processors: 60 
+    # First name of the recipient.  #### Litle Maximum length: 25  #### All other processors Maximum length: 60  Optional field. 
     attr_accessor :first_name
 
-    # Last name of the recipient.  **Processor-specific maximum length**  - Litle: 25 - All other processors: 60 
+    # Last name of the recipient.  #### Litle Maximum length: 25  #### All other processors Maximum length: 60  Optional field. 
     attr_accessor :last_name
 
-    # First line of the shipping address.
+    # First line of the shipping address.  Required field for authorization if any shipping address information is included in the request; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present. 
     attr_accessor :address1
 
-    # Second line of the shipping address.
+    # Second line of the shipping address.  Optional field.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present. 
     attr_accessor :address2
 
-    # City of the shipping address.
+    # City of the shipping address.  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present. 
     attr_accessor :locality
 
-    # State or province of the billing address. Use the State, Province, and Territory Codes for the United States and Canada.  For Payouts: This field may be sent only for FDC Compass.  **CyberSource through VisaNet** Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  ccAuthService (Required when the billing country is the U.S. or Canada; otherwise, optional.) This field is optional if your CyberSource account is configured for relaxed requirements for address data and expiration date. See \"Relaxed Requirements for Address Data and Expiration Date,\" page 75. Important It is your responsibility to determine whether a field is required for the transaction you are requesting.  For processor-specific information, see the bill_state field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # State or province of the billing address. Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf).  For Payouts: This field may be sent only for FDC Compass.  ##### CyberSource through VisaNet Credit card networks cannot process transactions that contain non-ASCII characters. CyberSource through VisaNet accepts and stores non-ASCII characters correctly and displays them correctly in reports. However, the limitations of the credit card networks prevent CyberSource through VisaNet from transmitting non-ASCII characters to the credit card networks. Therefore, CyberSource through VisaNet replaces non-ASCII characters with meaningless ASCII characters for transmission to the credit card networks.  **Important** It is your responsibility to determine whether a field is required for the transaction you are requesting.  #### Chase Paymentech Solutions Optional field.  ####  Credit Mutuel-CIC Optional field.  #### OmniPay Direct Optional field.  #### SIX Optional field.  #### TSYS Acquiring Solutions Required when `processingInformation.billPaymentOptions.billPayment=true` and `pointOfSaleInformation.entryMode=keyed`.  #### Worldpay VAP Optional field.  #### All other processors Not used. 
     attr_accessor :administrative_area
 
-    # Postal code for the shipping address. The postal code must consist of 5 to 9 digits.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  Example 12345-6789  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  Example A1B 2C3  **American Express Direct**\\ Before sending the postal code to the processor, CyberSource removes all nonalphanumeric characters and, if the remaining value is longer than nine characters, truncates the value starting from the right side. 
+    # Postal code for the shipping address. The postal code must consist of 5 to 9 digits.  Required field for authorization if any shipping address information is included in the request and shipping to the U.S. or Canada; otherwise, optional.  When the billing country is the U.S., the 9-digit postal code must follow this format: [5 digits][dash][4 digits]  Example 12345-6789  When the billing country is Canada, the 6-digit postal code must follow this format: [alpha][numeric][alpha][space][numeric][alpha][numeric]  Example A1B 2C3  #### American Express Direct Before sending the postal code to the processor, all nonalphanumeric characters are removed and, if the remaining value is longer than nine characters, the value is truncated starting from the right side. #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present. 
     attr_accessor :postal_code
 
     # Name of the customer’s company.  For processor-specific information, see the company_name field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
     attr_accessor :company
 
-    # Country of the shipping address. Use the two-character ISO Standard Country Codes.
+    # Country of the shipping address. Use the two-character [ISO Standard Country Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf)  Required field for authorization if any shipping address information is included in the request; otherwise, optional.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes. Billing address objects will be used to determine the cardholder’s location when shipTo objects are not present. 
     attr_accessor :country
 
     # Phone number associated with the shipping address.
@@ -149,8 +149,8 @@ module CyberSource
         invalid_properties.push('invalid value for "locality", the character length must be smaller than or equal to 50.')
       end
 
-      if !@administrative_area.nil? && @administrative_area.to_s.length > 3
-        invalid_properties.push('invalid value for "administrative_area", the character length must be smaller than or equal to 3.')
+      if !@administrative_area.nil? && @administrative_area.to_s.length > 20
+        invalid_properties.push('invalid value for "administrative_area", the character length must be smaller than or equal to 20.')
       end
 
       if !@postal_code.nil? && @postal_code.to_s.length > 10
@@ -180,7 +180,7 @@ module CyberSource
       return false if !@address1.nil? && @address1.to_s.length > 60
       return false if !@address2.nil? && @address2.to_s.length > 60
       return false if !@locality.nil? && @locality.to_s.length > 50
-      return false if !@administrative_area.nil? && @administrative_area.to_s.length > 3
+      return false if !@administrative_area.nil? && @administrative_area.to_s.length > 20
       return false if !@postal_code.nil? && @postal_code.to_s.length > 10
       return false if !@company.nil? && @company.to_s.length > 60
       return false if !@country.nil? && @country.to_s.length > 2
@@ -241,8 +241,8 @@ module CyberSource
     # Custom attribute writer method with validation
     # @param [Object] administrative_area Value to be assigned
     def administrative_area=(administrative_area)
-      if !administrative_area.nil? && administrative_area.to_s.length > 3
-        fail ArgumentError, 'invalid value for "administrative_area", the character length must be smaller than or equal to 3.'
+      if !administrative_area.nil? && administrative_area.to_s.length > 20
+        fail ArgumentError, 'invalid value for "administrative_area", the character length must be smaller than or equal to 20.'
       end
 
       @administrative_area = administrative_area

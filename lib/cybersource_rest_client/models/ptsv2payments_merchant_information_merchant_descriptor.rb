@@ -14,29 +14,35 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsMerchantInformationMerchantDescriptor
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)  For Payouts: * Paymentech (22) 
+    # Your merchant name.  **Note** For Paymentech processor using Cybersource Payouts, the maximum data length is 22.  #### PIN debit Your business name. This name is displayed on the cardholder’s statement. When you include more than one consecutive space, extra spaces are removed.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  Optional field for PIN debit credit or PIN debit purchase requests.  #### Airline processing Your merchant name. This name is displayed on the cardholder’s statement. When you include more than one consecutive space, extra spaces are removed.  **Note** Some airline fee programs may require the original ticket number (ticket identifier) or the ancillary service description in positions 13 through 23 of this field.  **Important** This value must consist of English characters.  Required for captures and credits. 
     attr_accessor :name
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # An alternate name for the merchant.  For the descriptions, used-by information, data types, and lengths for these fields, see the `merchant_descriptor_alternate` field description in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)--> 
     attr_accessor :alternate_name
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) * FDCCompass (13) * Paymentech (13) 
+    # For the descriptions, used-by information, data types, and lengths for these fields, see `merchant_descriptor_contact` field description in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)--> Contact information for the merchant.  **Note** These are the maximum data lengths for the following payment processors: - FDCCompass (13) - Paymentech (13) 
     attr_accessor :contact
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # First line of merchant's address. For the descriptions, used-by information, data types, and lengths for these fields, see `merchant_descriptor_street` field description in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
     attr_accessor :address1
 
-    # Merchant City. For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Merchant's City.  #### PIN debit City for your business location. This value might be displayed on the cardholder’s statement.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  Optional field for PIN debit credit or PIN debit purchase requests. 
     attr_accessor :locality
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Merchant's country.  #### PIN debit Country code for your business location. Use the [ISO Standard Country Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf) This value might be displayed on the cardholder’s statement.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters. **Note** If your business is located in the U.S. or Canada and you include this field in a request, you must also include `merchantInformation.merchantDescriptor.administrativeArea`.  Optional field for PIN debit credit or PIN debit purchase. 
     attr_accessor :country
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Merchant's postal code.  #### PIN debit Postal code for your business location. This value might be displayed on the cardholder’s statement.  If your business is domiciled in the U.S., you can use a 5-digit or 9-digit postal code. A 9-digit postal code must follow this format: [5 digits][dash][4 digits] Example: `12345-6789`  If your business is domiciled in Canada, you can use a 6-digit or 9-digit postal code. A 6-digit postal code must follow this format: [alpha][numeric][alpha][space] [numeric][alpha][numeric] Example: `A1B 2C3`  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  **Note** This field is supported only for businesses located in the U.S. or Canada. **Important** Mastercard requires a postal code for any country that uses postal codes. You can provide the postal code in your account or you can include this field in your request.  Optional field for PIN debit credit or PIN debit purchase. 
     attr_accessor :postal_code
 
-    # Merchant State. For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # The state where the merchant is located.  #### PIN debit State code or region code for your business. Use the Use the [State, Province, and Territory Codes for the United States and Canada](https://developer.cybersource.com/library/documentation/sbc/quickref/states_and_provinces.pdf) This value might be displayed on the cardholder’s statement.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  **Note** This field is supported only for businesses located in the U.S. or Canada.  Optional field for PIN debit credit or PIN debit purchase. 
     attr_accessor :administrative_area
+
+    # Merchnat phone as contact information for CNP transactions 
+    attr_accessor :phone
+
+    # Address of company's website provided by merchant 
+    attr_accessor :url
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -48,7 +54,9 @@ module CyberSource
         :'locality' => :'locality',
         :'country' => :'country',
         :'postal_code' => :'postalCode',
-        :'administrative_area' => :'administrativeArea'
+        :'administrative_area' => :'administrativeArea',
+        :'phone' => :'phone',
+        :'url' => :'url'
       }
     end
 
@@ -62,7 +70,9 @@ module CyberSource
         :'locality' => :'String',
         :'country' => :'String',
         :'postal_code' => :'String',
-        :'administrative_area' => :'String'
+        :'administrative_area' => :'String',
+        :'phone' => :'String',
+        :'url' => :'String'
       }
     end
 
@@ -105,6 +115,14 @@ module CyberSource
       if attributes.has_key?(:'administrativeArea')
         self.administrative_area = attributes[:'administrativeArea']
       end
+
+      if attributes.has_key?(:'phone')
+        self.phone = attributes[:'phone']
+      end
+
+      if attributes.has_key?(:'url')
+        self.url = attributes[:'url']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -127,16 +145,16 @@ module CyberSource
         invalid_properties.push('invalid value for "locality", the character length must be smaller than or equal to 13.')
       end
 
-      if !@country.nil? && @country.to_s.length > 2
-        invalid_properties.push('invalid value for "country", the character length must be smaller than or equal to 2.')
-      end
-
       if !@postal_code.nil? && @postal_code.to_s.length > 14
         invalid_properties.push('invalid value for "postal_code", the character length must be smaller than or equal to 14.')
       end
 
-      if !@administrative_area.nil? && @administrative_area.to_s.length > 3
-        invalid_properties.push('invalid value for "administrative_area", the character length must be smaller than or equal to 3.')
+      if !@phone.nil? && @phone.to_s.length > 13
+        invalid_properties.push('invalid value for "phone", the character length must be smaller than or equal to 13.')
+      end
+
+      if !@url.nil? && @url.to_s.length > 255
+        invalid_properties.push('invalid value for "url", the character length must be smaller than or equal to 255.')
       end
 
       invalid_properties
@@ -149,9 +167,9 @@ module CyberSource
       return false if !@contact.nil? && @contact.to_s.length > 14
       return false if !@address1.nil? && @address1.to_s.length > 60
       return false if !@locality.nil? && @locality.to_s.length > 13
-      return false if !@country.nil? && @country.to_s.length > 2
       return false if !@postal_code.nil? && @postal_code.to_s.length > 14
-      return false if !@administrative_area.nil? && @administrative_area.to_s.length > 3
+      return false if !@phone.nil? && @phone.to_s.length > 13
+      return false if !@url.nil? && @url.to_s.length > 255
       true
     end
 
@@ -196,16 +214,6 @@ module CyberSource
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] country Value to be assigned
-    def country=(country)
-      if !country.nil? && country.to_s.length > 2
-        fail ArgumentError, 'invalid value for "country", the character length must be smaller than or equal to 2.'
-      end
-
-      @country = country
-    end
-
-    # Custom attribute writer method with validation
     # @param [Object] postal_code Value to be assigned
     def postal_code=(postal_code)
       if !postal_code.nil? && postal_code.to_s.length > 14
@@ -216,13 +224,23 @@ module CyberSource
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] administrative_area Value to be assigned
-    def administrative_area=(administrative_area)
-      if !administrative_area.nil? && administrative_area.to_s.length > 3
-        fail ArgumentError, 'invalid value for "administrative_area", the character length must be smaller than or equal to 3.'
+    # @param [Object] phone Value to be assigned
+    def phone=(phone)
+      if !phone.nil? && phone.to_s.length > 13
+        fail ArgumentError, 'invalid value for "phone", the character length must be smaller than or equal to 13.'
       end
 
-      @administrative_area = administrative_area
+      @phone = phone
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] url Value to be assigned
+    def url=(url)
+      if !url.nil? && url.to_s.length > 255
+        fail ArgumentError, 'invalid value for "url", the character length must be smaller than or equal to 255.'
+      end
+
+      @url = url
     end
 
     # Checks equality by comparing each attribute.
@@ -237,7 +255,9 @@ module CyberSource
           locality == o.locality &&
           country == o.country &&
           postal_code == o.postal_code &&
-          administrative_area == o.administrative_area
+          administrative_area == o.administrative_area &&
+          phone == o.phone &&
+          url == o.url
     end
 
     # @see the `==` method
@@ -249,7 +269,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [name, alternate_name, contact, address1, locality, country, postal_code, administrative_area].hash
+      [name, alternate_name, contact, address1, locality, country, postal_code, administrative_area, phone, url].hash
     end
 
     # Builds the object from hash

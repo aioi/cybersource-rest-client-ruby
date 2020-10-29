@@ -14,35 +14,44 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsProcessingInformation
-    # Flag that specifies whether to also include capture service in the submitted request or not.  Possible values: - **true** - **false** (default). 
+    # Array of actions (one or more) to be included in the payment to invoke bundled serviecs along with payment.  Possible values are one or more of follows:   - `DECISION_SKIP`: Use this when you want to skip Decision Manager service(s).   - `TOKEN_CREATE`: Use this when you want to create a token from the card/bank data in your payment request.   - `CONSUMER_AUTHENTICATION`: Use this when you want to check if a card is enrolled in Payer Authentioncation along with your payment request.   - `VALIDATE_CONSUMER_AUTHENTICATION`: Use this after you acquire a Payer Authentioncation result that needs to be included for your payment request. 
+    attr_accessor :action_list
+
+    # CyberSource tokens types you are performing a create on. If not supplied the default token type for the merchants token vault will be used.  Valid values: - customer - paymentInstrument - instrumentIdentifier - shippingAddress 
+    attr_accessor :action_token_types
+
+    # Indicates whether to also include a capture  in the submitted authorization request or not.  Possible values: - `true`: Include a capture with an authorization request. - `false`: (default) Do not include a capture with an authorization request.  #### Used by **Authorization and Capture** Optional field. 
     attr_accessor :capture
 
     # Value that identifies the processor/acquirer to use for the transaction. This value is supported only for **CyberSource through VisaNet**.  Contact CyberSource Customer Support to get the value for this field. 
     attr_accessor :processor_id
 
-    # The description for this field is not available.
+    # Payouts transaction type. Required for OCT transactions. This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. **Note** When the request includes this field, this value overrides the information in your CyberSource account.  For valid values, see the `invoiceHeader_businessApplicationID` field description in [Payouts Using the Simple Order API.](http://apps.cybersource.com/library/documentation/dev_guides/payouts_SO/Payouts_SO_API.pdf) 
     attr_accessor :business_application_id
 
-    # Type of transaction. Some payment card companies use this information when determining discount rates. When you omit this field for **Ingenico ePayments**, the processor uses the default transaction type they have on file for you instead of the default value listed here. 
+    # Type of transaction. Some payment card companies use this information when determining discount rates.  #### Used by **Authorization** Required payer authentication transactions; otherwise, optional. **Credit** Required for standalone credits on Chase Paymentech solutions; otherwise, optional. Only `internet`, `moto`, `install`, `recurring`, and `recurring_internet` are valid values.  #### Ingenico ePayments When you omit this field for Ingenico ePayments, the processor uses the default transaction type they have on file for you instead of the default value (listed in Appendix I, \"Commerce Indicators,\" on page 441.)  #### Payer Authentication Transactions For the possible values and requirements, see \"Payer Authentication,\" page 195.  #### Other Types of Transactions See Appendix I, \"Commerce Indicators,\" on page 441.  #### Card Present You must set this field to `retail`. This field is required for a card-present transaction. 
     attr_accessor :commerce_indicator
 
-    # Type of digital payment solution for the transaction. Possible Values:   - **visacheckout**: Visa Checkout. This value is required for Visa Checkout transactions. See Visa Checkout Using the SCMP API.  - **005**: Masterpass. This value is required for Masterpass transactions on OmniPay Direct. See \"Masterpass,\" page 153. 
+    # Type of digital payment solution for the transaction. Possible Values:   - `visacheckout`: Visa Checkout. This value is required for Visa Checkout transactions. For details, see `payment_solution` field description in [Visa Checkout Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/VCO_SCMP_API/html/)  - `001`: Apple Pay.  - `004`: Cybersource In-App Solution.  - `005`: Masterpass. This value is required for Masterpass transactions on OmniPay Direct. For details, see \"Masterpass\" in the [Credit Card Services Using the SCMP API Guide.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/)  - `006`: Android Pay.  - `007`: Chase Pay.  - `008`: Samsung Pay.  - `012`: Google Pay. 
     attr_accessor :payment_solution
 
     # Please check with Cybersource customer support to see if your merchant account is configured correctly so you can include this field in your request. * For Payouts: max length for FDCCompass is String (22). 
     attr_accessor :reconciliation_id
 
-    # Value that links the current authorization request to the original authorization request. Set this value to the ID that was returned in the reply message from the original authorization request.  This value is used for:   - Partial authorizations: See \"Partial Authorizations,\" page 88.  - Split shipments: See \"Split Shipments,\" page 210. 
+    # Value that links the current authorization request to the original authorization request. Set this value to the ID that was returned in the reply message from the original authorization request.  This value is used for:  - Partial authorizations - Split shipments  For details, see `link_to_request` field description in [Credit Card Services Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/) 
     attr_accessor :link_id
 
     # Set this field to 3 to indicate that the request includes Level III data.
     attr_accessor :purchase_level
 
-    # Attribute that lets you define custom grouping for your processor reports. This field is supported only for **Worldpay VAP**.  See \"Report Groups,\" page 234. 
+    # Attribute that lets you define custom grouping for your processor reports. This field is supported only for **Worldpay VAP**.  For details, see `report_group` field description in [Credit Card Services Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/) 
     attr_accessor :report_group
 
-    # Identifier for the **Visa Checkout** order. Visa Checkout provides a unique order ID for every transaction in the Visa Checkout **callID** field.  For more details, see Visa Checkout Using the SCMP API. 
+    # Identifier for the **Visa Checkout** order. Visa Checkout provides a unique order ID for every transaction in the Visa Checkout **callID** field. 
     attr_accessor :visa_checkout_id
+
+    # Indicates that the transaction includes industry-specific data.  Possible Values: - `airline` - `restaurant` - `lodging` - `auto_rental` - `transit` - `healthcare_medical` - `healthcare_transit` - `transit`  #### Card Present, Airlines and Auto Rental You must set this field to `airline` in order for airline data to be sent to the processor. For example, if this field is not set to `airline` or is not included in the request, no airline data is sent to the processor.  You must set this field to `restaurant` in order for restaurant data to be sent to the processor. When this field is not set to `restaurant` or is not included in the request, no restaurant data is sent to the processor.  You must set this field to `auto_rental` in order for auto rental data to be sent to the processor. For example, if this field is not set to `auto_rental` or is not included in the request, no auto rental data is sent to the processor.  Restaurant data is supported only on CyberSource through VisaNet. 
+    attr_accessor :industry_data_type
 
     attr_accessor :authorization_options
 
@@ -52,9 +61,34 @@ module CyberSource
 
     attr_accessor :bank_transfer_options
 
+    attr_accessor :purchase_options
+
+    attr_accessor :electronic_benefits_transfer
+
+    attr_accessor :loan_options
+
+    # This field carries the wallet type in authorization requests and credit requests. Possible value are: - `101`: Masterpass remote payment. The customer created the wallet by manually interacting with a customer-controlled device such as a computer, tablet, or phone. This value is supported only for Masterpass transactions on Chase Paymentech Solutions and CyberSource through VisaNet. - `102`: Masterpass remote near field communication (NFC) payment. The customer created the wallet by tapping a PayPass card or customer-controlled device at a contactless card reader. This value is supported only for card-present Masterpass transactions on CyberSource through VisaNet. - `103`: Masterpass Apple Pay payment. The payment was made with a combination of Masterpass and Apple Pay. This value is supported only for Masterpass Apple Pay transactions on CyberSource through VisaNet. - `216`: Masterpass Google Pay payment. The payment was made with a combination of Masterpass and Google Pay. This value is supported only for Masterpass Google Pay transactions on CyberSource through VisaNet. - `217`: Masterpass Samsung Pay payment. The payment was made with a combination of Masterpass and Samsung Pay. This value is supported only for Masterpass Samsung Pay transactions on CyberSource through VisaNet. - `SDW`: Staged digital wallet. An issuer or operator created the wallet. This value is supported only for Masterpass transactions on Chase Paymentech Solutions. - `VCIND`: Visa Checkout payment. This value is supported only on CyberSource through VisaNet, FDC Compass, FDC Nashville Global, FDI Australia, and TSYS Acquiring Solutions. See Getting Started with Visa Checkout. For Visa Checkout transactions, the way CyberSource processes the value for this field depends on the processor. See the Visa Checkout section below. For all other values, this field is a passthrough; therefore, CyberSource does not verify the value or modify it in any way before sending it to the processor. Masterpass (101, 102, 103, 216, and 217): The Masterpass platform generates the wallet type value and passes it to you along with the customer’s checkout information.  Visa Checkout: This field is optional for Visa Checkout authorizations on FDI Australia. For all other processors, this field is required for Visa Checkout authorizations. For Visa Checkout transactions on the following processors, CyberSource sends the value that the processor expects for this field:FDC Compass,FDC Nashville Global,FDI Australia,TSYS Acquiring Solutions For all other processors, this field is a passthrough; therefore, CyberSource does not verify the value or modify it in any way before sending it to the processor. For incremental authorizations, this field is supported only for Mastercard and the supported values are 101 and 102. Payment card companies can introduce new values without notice. Your order management system should be able to process new values without problems.  CyberSource through VisaNet When the value for this field is 101, 102, 103, 216, or 217, it corresponds to the following data in the TC 33 capture file5: Record: CP01 TCR6, Position: 88-90,  Field: Mastercard Wallet Identifier. When the value for this field is VCIND, it corresponds to the following data in the TC 33 capture file5: Record: CP01 TCR8, Position: 72-76, Field: Agent Unique ID. 
+    attr_accessor :wallet_type
+
+    # Supplementary domestic transaction information provided by the acquirer for National Net Settlement Service (NNSS) transactions. NNSS is a settlement service that Visa provides. For transactions on CyberSource through VisaNet in countries that subscribe to NNSS: VisaNet clears transactions; VisaNet transfers funds to the acquirer after deducting processing fees and interchange fees. VisaNet settles transactions in the local pricing currency through a local financial institution. This field is supported only on CyberSource through VisaNet for domestic data in Colombia 
+    attr_accessor :national_net_domestic_data
+
+    attr_accessor :japan_payment_options
+
+    # Type of payment initiated from a cardholder's mobile device. Possible values: - `1` :  Consumer-initiated remote purchase, face-to-face - `2` :  Consumer-initiated remote purchase, e-commerce - `3` :  Consumer-initiated remote purchase, mail order / telephone order - `4` :  Consumer-initiated bill pay - `5` :  Consumer-initiated top up - `6` :  Consumer-initiated cash out - `7` :  ATM triggered or agent-initiated cash out - `8` :  Merchant-initiated remote purchase, face-to-face - `9` :  Merchant-initiated remote purchase, e-commerce  This field is supported only for Mastercard transactions on CyberSource through VisaNet.  Optional field.  **Note** On CyberSource through VisaNet, the value for this field corresponds to the following data in the TC 33 capture file: - Record: CP01 TCR6 - Position: 94 - Field: Mastercard Mobile Remote Payment Program Indicator  The TC 33 Capture file contains information about the purchases and refunds that a merchant submits to CyberSource. CyberSource through VisaNet creates the TC 33 Capture file at the end of the day and sends it to the merchant’s acquirer, who uses this information to facilitate end-of-day clearing processing with payment networks. 
+    attr_accessor :mobile_remote_payment_type
+
+    # A private national-use field submitted by acquirers and issuers in South Africa for South Africa-domestic (intra-country) authorizations and financial requests. Values for this field are 00 through 99. 
+    attr_accessor :extended_credit_total_count
+
+    # On PIN Debit Gateways: This U.S.-only field is optionally used by  participants (merchants and acquirers) to specify the network access priority. VisaNet checks to determine if there are issuer routing preferences for any of the networks specified by the sharing group code. If an issuer preference exists for one of the specified debit networks, VisaNet makes a routing selection based on the issuer’s preference. If an issuer preference exists for more than one of the specified debit networks, or if no issuer preference exists, VisaNet makes a selection based on the acquirer’s routing priorities.  #### PIN debit Priority order of the networks through which he transaction will be routed. Set this value to a series of one-character network codes in your preferred order. This is a list of the network codes:  | Network | Code | | --- | --- | | Accel | E | | AFFN | U | | Alaska Option | 3 | | CU24 | C | | Interlink | G | | Maestro | 8 | | NETS | P | | NYCE | F | | Pulse | H | | Shazam | 7 | | Star | M | | Visa | V |  For example, if the Star network is your first preference and Pulse is your second preference, set this field to a value of `MH`.  When you do not include this value in your PIN debit request, the list of network codes from your account is used. **Note** This field is supported only for businesses located in the U.S.  Optional field for PIN debit credit or PIN debit purchase. 
+    attr_accessor :network_routing_order
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'action_list' => :'actionList',
+        :'action_token_types' => :'actionTokenTypes',
         :'capture' => :'capture',
         :'processor_id' => :'processorId',
         :'business_application_id' => :'businessApplicationId',
@@ -65,16 +99,28 @@ module CyberSource
         :'purchase_level' => :'purchaseLevel',
         :'report_group' => :'reportGroup',
         :'visa_checkout_id' => :'visaCheckoutId',
+        :'industry_data_type' => :'industryDataType',
         :'authorization_options' => :'authorizationOptions',
         :'capture_options' => :'captureOptions',
         :'recurring_options' => :'recurringOptions',
-        :'bank_transfer_options' => :'bankTransferOptions'
+        :'bank_transfer_options' => :'bankTransferOptions',
+        :'purchase_options' => :'purchaseOptions',
+        :'electronic_benefits_transfer' => :'electronicBenefitsTransfer',
+        :'loan_options' => :'loanOptions',
+        :'wallet_type' => :'walletType',
+        :'national_net_domestic_data' => :'nationalNetDomesticData',
+        :'japan_payment_options' => :'japanPaymentOptions',
+        :'mobile_remote_payment_type' => :'mobileRemotePaymentType',
+        :'extended_credit_total_count' => :'extendedCreditTotalCount',
+        :'network_routing_order' => :'networkRoutingOrder'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
+        :'action_list' => :'Array<String>',
+        :'action_token_types' => :'Array<String>',
         :'capture' => :'BOOLEAN',
         :'processor_id' => :'String',
         :'business_application_id' => :'String',
@@ -85,10 +131,20 @@ module CyberSource
         :'purchase_level' => :'String',
         :'report_group' => :'String',
         :'visa_checkout_id' => :'String',
+        :'industry_data_type' => :'String',
         :'authorization_options' => :'Ptsv2paymentsProcessingInformationAuthorizationOptions',
         :'capture_options' => :'Ptsv2paymentsProcessingInformationCaptureOptions',
         :'recurring_options' => :'Ptsv2paymentsProcessingInformationRecurringOptions',
-        :'bank_transfer_options' => :'Ptsv2paymentsProcessingInformationBankTransferOptions'
+        :'bank_transfer_options' => :'Ptsv2paymentsProcessingInformationBankTransferOptions',
+        :'purchase_options' => :'Ptsv2paymentsProcessingInformationPurchaseOptions',
+        :'electronic_benefits_transfer' => :'Ptsv2paymentsProcessingInformationElectronicBenefitsTransfer',
+        :'loan_options' => :'Ptsv2paymentsProcessingInformationLoanOptions',
+        :'wallet_type' => :'String',
+        :'national_net_domestic_data' => :'String',
+        :'japan_payment_options' => :'Ptsv2paymentsProcessingInformationJapanPaymentOptions',
+        :'mobile_remote_payment_type' => :'String',
+        :'extended_credit_total_count' => :'String',
+        :'network_routing_order' => :'String'
       }
     end
 
@@ -99,6 +155,18 @@ module CyberSource
 
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
+
+      if attributes.has_key?(:'actionList')
+        if (value = attributes[:'actionList']).is_a?(Array)
+          self.action_list = value
+        end
+      end
+
+      if attributes.has_key?(:'actionTokenTypes')
+        if (value = attributes[:'actionTokenTypes']).is_a?(Array)
+          self.action_token_types = value
+        end
+      end
 
       if attributes.has_key?(:'capture')
         self.capture = attributes[:'capture']
@@ -142,6 +210,10 @@ module CyberSource
         self.visa_checkout_id = attributes[:'visaCheckoutId']
       end
 
+      if attributes.has_key?(:'industryDataType')
+        self.industry_data_type = attributes[:'industryDataType']
+      end
+
       if attributes.has_key?(:'authorizationOptions')
         self.authorization_options = attributes[:'authorizationOptions']
       end
@@ -156,6 +228,42 @@ module CyberSource
 
       if attributes.has_key?(:'bankTransferOptions')
         self.bank_transfer_options = attributes[:'bankTransferOptions']
+      end
+
+      if attributes.has_key?(:'purchaseOptions')
+        self.purchase_options = attributes[:'purchaseOptions']
+      end
+
+      if attributes.has_key?(:'electronicBenefitsTransfer')
+        self.electronic_benefits_transfer = attributes[:'electronicBenefitsTransfer']
+      end
+
+      if attributes.has_key?(:'loanOptions')
+        self.loan_options = attributes[:'loanOptions']
+      end
+
+      if attributes.has_key?(:'walletType')
+        self.wallet_type = attributes[:'walletType']
+      end
+
+      if attributes.has_key?(:'nationalNetDomesticData')
+        self.national_net_domestic_data = attributes[:'nationalNetDomesticData']
+      end
+
+      if attributes.has_key?(:'japanPaymentOptions')
+        self.japan_payment_options = attributes[:'japanPaymentOptions']
+      end
+
+      if attributes.has_key?(:'mobileRemotePaymentType')
+        self.mobile_remote_payment_type = attributes[:'mobileRemotePaymentType']
+      end
+
+      if attributes.has_key?(:'extendedCreditTotalCount')
+        self.extended_credit_total_count = attributes[:'extendedCreditTotalCount']
+      end
+
+      if attributes.has_key?(:'networkRoutingOrder')
+        self.network_routing_order = attributes[:'networkRoutingOrder']
       end
     end
 
@@ -195,6 +303,30 @@ module CyberSource
         invalid_properties.push('invalid value for "visa_checkout_id", the character length must be smaller than or equal to 48.')
       end
 
+      if !@industry_data_type.nil? && @industry_data_type.to_s.length > 20
+        invalid_properties.push('invalid value for "industry_data_type", the character length must be smaller than or equal to 20.')
+      end
+
+      if !@wallet_type.nil? && @wallet_type.to_s.length > 5
+        invalid_properties.push('invalid value for "wallet_type", the character length must be smaller than or equal to 5.')
+      end
+
+      if !@national_net_domestic_data.nil? && @national_net_domestic_data.to_s.length > 123
+        invalid_properties.push('invalid value for "national_net_domestic_data", the character length must be smaller than or equal to 123.')
+      end
+
+      if !@mobile_remote_payment_type.nil? && @mobile_remote_payment_type.to_s.length > 1
+        invalid_properties.push('invalid value for "mobile_remote_payment_type", the character length must be smaller than or equal to 1.')
+      end
+
+      if !@extended_credit_total_count.nil? && @extended_credit_total_count.to_s.length > 1
+        invalid_properties.push('invalid value for "extended_credit_total_count", the character length must be smaller than or equal to 1.')
+      end
+
+      if !@network_routing_order.nil? && @network_routing_order.to_s.length > 30
+        invalid_properties.push('invalid value for "network_routing_order", the character length must be smaller than or equal to 30.')
+      end
+
       invalid_properties
     end
 
@@ -209,6 +341,12 @@ module CyberSource
       return false if !@purchase_level.nil? && @purchase_level.to_s.length > 1
       return false if !@report_group.nil? && @report_group.to_s.length > 25
       return false if !@visa_checkout_id.nil? && @visa_checkout_id.to_s.length > 48
+      return false if !@industry_data_type.nil? && @industry_data_type.to_s.length > 20
+      return false if !@wallet_type.nil? && @wallet_type.to_s.length > 5
+      return false if !@national_net_domestic_data.nil? && @national_net_domestic_data.to_s.length > 123
+      return false if !@mobile_remote_payment_type.nil? && @mobile_remote_payment_type.to_s.length > 1
+      return false if !@extended_credit_total_count.nil? && @extended_credit_total_count.to_s.length > 1
+      return false if !@network_routing_order.nil? && @network_routing_order.to_s.length > 30
       true
     end
 
@@ -292,11 +430,73 @@ module CyberSource
       @visa_checkout_id = visa_checkout_id
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] industry_data_type Value to be assigned
+    def industry_data_type=(industry_data_type)
+      if !industry_data_type.nil? && industry_data_type.to_s.length > 20
+        fail ArgumentError, 'invalid value for "industry_data_type", the character length must be smaller than or equal to 20.'
+      end
+
+      @industry_data_type = industry_data_type
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] wallet_type Value to be assigned
+    def wallet_type=(wallet_type)
+      if !wallet_type.nil? && wallet_type.to_s.length > 5
+        fail ArgumentError, 'invalid value for "wallet_type", the character length must be smaller than or equal to 5.'
+      end
+
+      @wallet_type = wallet_type
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] national_net_domestic_data Value to be assigned
+    def national_net_domestic_data=(national_net_domestic_data)
+      if !national_net_domestic_data.nil? && national_net_domestic_data.to_s.length > 123
+        fail ArgumentError, 'invalid value for "national_net_domestic_data", the character length must be smaller than or equal to 123.'
+      end
+
+      @national_net_domestic_data = national_net_domestic_data
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] mobile_remote_payment_type Value to be assigned
+    def mobile_remote_payment_type=(mobile_remote_payment_type)
+      if !mobile_remote_payment_type.nil? && mobile_remote_payment_type.to_s.length > 1
+        fail ArgumentError, 'invalid value for "mobile_remote_payment_type", the character length must be smaller than or equal to 1.'
+      end
+
+      @mobile_remote_payment_type = mobile_remote_payment_type
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] extended_credit_total_count Value to be assigned
+    def extended_credit_total_count=(extended_credit_total_count)
+      if !extended_credit_total_count.nil? && extended_credit_total_count.to_s.length > 1
+        fail ArgumentError, 'invalid value for "extended_credit_total_count", the character length must be smaller than or equal to 1.'
+      end
+
+      @extended_credit_total_count = extended_credit_total_count
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] network_routing_order Value to be assigned
+    def network_routing_order=(network_routing_order)
+      if !network_routing_order.nil? && network_routing_order.to_s.length > 30
+        fail ArgumentError, 'invalid value for "network_routing_order", the character length must be smaller than or equal to 30.'
+      end
+
+      @network_routing_order = network_routing_order
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          action_list == o.action_list &&
+          action_token_types == o.action_token_types &&
           capture == o.capture &&
           processor_id == o.processor_id &&
           business_application_id == o.business_application_id &&
@@ -307,10 +507,20 @@ module CyberSource
           purchase_level == o.purchase_level &&
           report_group == o.report_group &&
           visa_checkout_id == o.visa_checkout_id &&
+          industry_data_type == o.industry_data_type &&
           authorization_options == o.authorization_options &&
           capture_options == o.capture_options &&
           recurring_options == o.recurring_options &&
-          bank_transfer_options == o.bank_transfer_options
+          bank_transfer_options == o.bank_transfer_options &&
+          purchase_options == o.purchase_options &&
+          electronic_benefits_transfer == o.electronic_benefits_transfer &&
+          loan_options == o.loan_options &&
+          wallet_type == o.wallet_type &&
+          national_net_domestic_data == o.national_net_domestic_data &&
+          japan_payment_options == o.japan_payment_options &&
+          mobile_remote_payment_type == o.mobile_remote_payment_type &&
+          extended_credit_total_count == o.extended_credit_total_count &&
+          network_routing_order == o.network_routing_order
     end
 
     # @see the `==` method
@@ -322,7 +532,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [capture, processor_id, business_application_id, commerce_indicator, payment_solution, reconciliation_id, link_id, purchase_level, report_group, visa_checkout_id, authorization_options, capture_options, recurring_options, bank_transfer_options].hash
+      [action_list, action_token_types, capture, processor_id, business_application_id, commerce_indicator, payment_solution, reconciliation_id, link_id, purchase_level, report_group, visa_checkout_id, industry_data_type, authorization_options, capture_options, recurring_options, bank_transfer_options, purchase_options, electronic_benefits_transfer, loan_options, wallet_type, national_net_domestic_data, japan_payment_options, mobile_remote_payment_type, extended_credit_total_count, network_routing_order].hash
     end
 
     # Builds the object from hash

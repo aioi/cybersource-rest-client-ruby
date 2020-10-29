@@ -14,13 +14,13 @@ require 'date'
 
 module CyberSource
   class PtsV2PayoutsPost201ResponseMerchantInformationMerchantDescriptor
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)  For Payouts: * Paymentech (22) 
+    # Your merchant name.  **Note** For Paymentech processor using Cybersource Payouts, the maximum data length is 22.  #### PIN debit Your business name. This name is displayed on the cardholder’s statement. When you include more than one consecutive space, extra spaces are removed.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  Optional field for PIN debit credit or PIN debit purchase requests.  #### Airline processing Your merchant name. This name is displayed on the cardholder’s statement. When you include more than one consecutive space, extra spaces are removed.  **Note** Some airline fee programs may require the original ticket number (ticket identifier) or the ancillary service description in positions 13 through 23 of this field.  **Important** This value must consist of English characters.  Required for captures and credits. 
     attr_accessor :name
 
-    # Merchant City. For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Merchant's City.  #### PIN debit City for your business location. This value might be displayed on the cardholder’s statement.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters.  Optional field for PIN debit credit or PIN debit purchase requests. 
     attr_accessor :locality
 
-    # For the descriptions, used-by information, data types, and lengths for these fields, see Merchant Descriptors in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html) 
+    # Merchant's country.  #### PIN debit Country code for your business location. Use the [ISO Standard Country Codes](https://developer.cybersource.com/library/documentation/sbc/quickref/countries_alpha_list.pdf) This value might be displayed on the cardholder’s statement.  When you do not include this value in your PIN debit request, the merchant name from your account is used. **Important** This value must consist of English characters. **Note** If your business is located in the U.S. or Canada and you include this field in a request, you must also include `merchantInformation.merchantDescriptor.administrativeArea`.  Optional field for PIN debit credit or PIN debit purchase. 
     attr_accessor :country
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -70,10 +70,6 @@ module CyberSource
         invalid_properties.push('invalid value for "locality", the character length must be smaller than or equal to 13.')
       end
 
-      if !@country.nil? && @country.to_s.length > 2
-        invalid_properties.push('invalid value for "country", the character length must be smaller than or equal to 2.')
-      end
-
       invalid_properties
     end
 
@@ -81,7 +77,6 @@ module CyberSource
     # @return true if the model is valid
     def valid?
       return false if !@locality.nil? && @locality.to_s.length > 13
-      return false if !@country.nil? && @country.to_s.length > 2
       true
     end
 
@@ -93,16 +88,6 @@ module CyberSource
       end
 
       @locality = locality
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] country Value to be assigned
-    def country=(country)
-      if !country.nil? && country.to_s.length > 2
-        fail ArgumentError, 'invalid value for "country", the character length must be smaller than or equal to 2.'
-      end
-
-      @country = country
     end
 
     # Checks equality by comparing each attribute.

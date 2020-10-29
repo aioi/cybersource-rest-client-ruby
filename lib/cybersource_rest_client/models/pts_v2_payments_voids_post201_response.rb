@@ -16,10 +16,10 @@ module CyberSource
   class PtsV2PaymentsVoidsPost201Response
     attr_accessor :_links
 
-    # An unique identification number assigned by CyberSource to identify the submitted request. It is also appended to the endpoint of the resource.
+    # An unique identification number to identify the submitted request. It is also appended to the endpoint of the resource.  On incremental authorizations, this value with be the same as the identification number returned in the original authorization response.  #### PIN debit Returned for all PIN debit services. 
     attr_accessor :id
 
-    # Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` Example `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC. 
+    # Time of request in UTC. Format: `YYYY-MM-DDThh:mm:ssZ` **Example** `2016-08-11T22:47:57Z` equals August 11, 2016, at 22:47:57 (10:47:57 p.m.). The `T` separates the date and the time. The `Z` indicates UTC.  Returned by authorization service.  #### PIN debit Time when the PIN debit credit, PIN debit purchase or PIN debit reversal was requested.  Returned by PIN debit credit, PIN debit purchase or PIN debit reversal. 
     attr_accessor :submit_time_utc
 
     # The status of the submitted transaction.  Possible values:  - VOIDED 
@@ -29,27 +29,7 @@ module CyberSource
 
     attr_accessor :void_amount_details
 
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
+    attr_accessor :processor_information
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -59,19 +39,21 @@ module CyberSource
         :'submit_time_utc' => :'submitTimeUtc',
         :'status' => :'status',
         :'client_reference_information' => :'clientReferenceInformation',
-        :'void_amount_details' => :'voidAmountDetails'
+        :'void_amount_details' => :'voidAmountDetails',
+        :'processor_information' => :'processorInformation'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'_links' => :'PtsV2PaymentsReversalsPost201ResponseLinks',
+        :'_links' => :'PtsV2IncrementalAuthorizationPatch201ResponseLinks',
         :'id' => :'String',
         :'submit_time_utc' => :'String',
         :'status' => :'String',
         :'client_reference_information' => :'PtsV2PaymentsPost201ResponseClientReferenceInformation',
-        :'void_amount_details' => :'PtsV2PaymentsVoidsPost201ResponseVoidAmountDetails'
+        :'void_amount_details' => :'PtsV2PaymentsVoidsPost201ResponseVoidAmountDetails',
+        :'processor_information' => :'PtsV2PaymentsVoidsPost201ResponseProcessorInformation'
       }
     end
 
@@ -106,6 +88,10 @@ module CyberSource
       if attributes.has_key?(:'voidAmountDetails')
         self.void_amount_details = attributes[:'voidAmountDetails']
       end
+
+      if attributes.has_key?(:'processorInformation')
+        self.processor_information = attributes[:'processorInformation']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -123,8 +109,6 @@ module CyberSource
     # @return true if the model is valid
     def valid?
       return false if !@id.nil? && @id.to_s.length > 26
-      status_validator = EnumAttributeValidator.new('String', ['VOIDED'])
-      return false unless status_validator.valid?(@status)
       true
     end
 
@@ -138,16 +122,6 @@ module CyberSource
       @id = id
     end
 
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] status Object to be assigned
-    def status=(status)
-      validator = EnumAttributeValidator.new('String', ['VOIDED'])
-      unless validator.valid?(status)
-        fail ArgumentError, 'invalid value for "status", must be one of #{validator.allowable_values}.'
-      end
-      @status = status
-    end
-
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -158,7 +132,8 @@ module CyberSource
           submit_time_utc == o.submit_time_utc &&
           status == o.status &&
           client_reference_information == o.client_reference_information &&
-          void_amount_details == o.void_amount_details
+          void_amount_details == o.void_amount_details &&
+          processor_information == o.processor_information
     end
 
     # @see the `==` method
@@ -170,7 +145,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [_links, id, submit_time_utc, status, client_reference_information, void_amount_details].hash
+      [_links, id, submit_time_utc, status, client_reference_information, void_amount_details, processor_information].hash
     end
 
     # Builds the object from hash

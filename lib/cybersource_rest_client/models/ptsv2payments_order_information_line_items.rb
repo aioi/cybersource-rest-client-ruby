@@ -14,31 +14,31 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsOrderInformationLineItems
-    # Type of product. This value is used to determine the category that the product is in: electronic, handling, physical, service, or shipping. The default value is **default**. If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than default or any of the values related to shipping and handling, then the fields `quantity`, `productName`, and `productSku` are required. It can also have a value of \"gift_card\".  See Appendix O, \"Product Codes,\" on page 373 for a list of valid values. For a payment, when you set this field to a value other than default or any of the values related to shipping and handling, below fields _quantity_, _productName_, and _productSKU_ are required. 
+    # Type of product. The value for this field is used to identify the product category (electronic, handling, physical, service, or shipping). The default value is `default`.  If you are performing an authorization transaction (`processingOptions.capture` is set to `false`), and you set this field to a value other than `default` or one of the values related to shipping and/or handling, then `orderInformation.lineItems[].quantity`, `orderInformation.lineItems[].productName`, and `orderInformation.lineItems[].productSku` fields are required.  Optional field.  For details, see the `product_code` field description in the [Credit Card Services Using the SCMP API Guide](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/).  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  To use the tax calculation service, use values listed in the Tax Product Code Guide. For information about this document, contact customer support. See \"Product Codes,\" page 14, for more information. 
     attr_accessor :product_code
 
-    # For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not set to `default` or one of the other values that are related to shipping and/or handling. 
+    # For an authorization or capture transaction (`processingOptions.capture` is `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not `default` or one of the other values that are related to shipping and/or handling.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes. 
     attr_accessor :product_name
 
-    # Stock Keeping Unit (SKU) code for the product.  For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when _orderInformation.lineItems[].productCode_ is not set to **default** or one of the other values that are related to shipping and/or handling. 
+    # Product identifier code. Also known as the Stock Keeping Unit (SKU) code for the product.  For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not set to **default** or one of the other values that are related to shipping and/or handling.  #### Tax Calculation Optional field for U.S. and Canadian taxes. Not applicable to international and value added taxes. For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not `default` or one of the values related to shipping and/or handling. 
     attr_accessor :product_sku
 
-    # Number of units for this order. For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not set to `default` or one of the other values that are related to shipping and/or handling. When `orderInformation.lineItems[].productCode` is `gift_card`, this is the total count of individual prepaid gift cards purchased. 
+    # Number of units for this order. Must be a non-negative integer.  The default is `1`. For an authorization or capture transaction (`processingOptions.capture` is set to `true` or `false`), this field is required when `orderInformation.lineItems[].productCode` is not `default` or one of the other values related to shipping and/or handling.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes. 
     attr_accessor :quantity
 
-    # Per-item price of the product. This value cannot be negative. You can include a decimal point (.), but you cannot include any other special characters. CyberSource truncates the amount to the correct number of decimal places.  For processor-specific information, see the amount field in [Credit Card Services Using the SCMP API.](http://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html)  **Important** Some processors have specific requirements and limitations, such as maximum amounts and maximum field lengths. This information is covered in: - Table 12, \"Authorization Information for Specific Processors,\" on page 36 - Table 16, \"Capture Information for Specific Processors,\" on page 51 - Table 20, \"Credit Information for Specific Processors,\" on page 65  **DCC for First Data**\\ This value is the original amount in your local currency. You must include this field. You cannot use grand_total_amount. See \"Dynamic Currency Conversion for First Data,\" page 113.  **FDMS South**\\ If you accept IDR or CLP currencies, see the entry for FDMS South in Table 12, \"Authorization Information for Specific Processors,\" on page 36.  **Zero Amount Authorizations**\\ If your processor supports zero amount authorizations, you can set this field to 0 for the authorization to check if the card is lost or stolen. See \"Zero Amount Authorizations,\" page 220. 
+    # Per-item price of the product. This value for this field cannot be negative.  You must include either this field or the request-level field `orderInformation.amountDetails.totalAmount` in your request.  You can include a decimal point (.), but you cannot include any other special characters. The value is truncated to the correct number of decimal places.  #### DCC with a Third-Party Provider Set this field to the converted amount that was returned by the DCC provider. You must include either the 1st line item in the order and this field, or the request-level field `orderInformation.amountDetails.totalAmount` in your request.  #### FDMS South If you accept IDR or CLP currencies, see the entry for FDMS South in the [Merchant Descriptors Using the SCMP API Guide.] (https://apps.cybersource.com/library/documentation/dev_guides/Merchant_Descriptors_SCMP_API/html/)  #### Tax Calculation Required field for U.S., Canadian, international and value added taxes.  #### Zero Amount Authorizations If your processor supports zero amount authorizations, you can set this field to 0 for the authorization to check if the card is lost or stolen.  #### Maximum Field Lengths For GPN and JCN Gateway: Decimal (10) All other processors: Decimal (15) 
     attr_accessor :unit_price
 
     # Unit of measure, or unit of measure code, for the item. 
     attr_accessor :unit_of_measure
 
-    # Total amount for the item. Normally calculated as the unit price x quantity.  When orderInformation.lineItems[].productCode is \"gift_card\", this is the purchase amount total for prepaid gift cards in major units. Example: 123.45 USD= 123 
+    # Total amount for the item. Normally calculated as the unit price times quantity.  When `orderInformation.lineItems[].productCode` is \"gift_card\", this is the purchase amount total for prepaid gift cards in major units.  Example: 123.45 USD = 123 
     attr_accessor :total_amount
 
-    # Total tax to apply to the product. This value cannot be negative. The tax amount and the offer amount must be in the same currency. The tax amount field is additive.  The following example uses a two-exponent currency such as USD:   1. You include each line item in your request.  ..- 1st line item has amount=10.00, quantity=1, and taxAmount=0.80  ..- 2nd line item has amount=20.00, quantity=1, and taxAmount=1.60  2. The total amount authorized will be 32.40, not 30.00 with 2.40 of tax included.  If you want to include the tax amount and also request the ics_tax service, see Tax Calculation Service Using the SCMP API.  This field is frequently used for Level II and Level III transactions. See Level II and Level III Processing Using the SCMP API. 
+    # Total tax to apply to the product. This value cannot be negative. The tax amount and the offer amount must be in the same currency. The tax amount field is additive.  The following example uses a two-exponent currency such as USD:   1. You include each line item in your request.  ..- 1st line item has amount=10.00, quantity=1, and taxAmount=0.80  ..- 2nd line item has amount=20.00, quantity=1, and taxAmount=1.60  2. The total amount authorized will be 32.40, not 30.00 with 2.40 of tax included.  Optional field.  #### Airlines processing Tax portion of the order amount. This value cannot exceed 99999999999999 (fourteen 9s). Format: English characters only. Optional request field for a line item.  #### Tax Calculation Optional field for U.S., Canadian, international tax, and value added taxes.  Note if you send this field in your tax request, the value in the field will override the tax engine 
     attr_accessor :tax_amount
 
-    # Tax rate applied to the item. See \"Numbered Elements,\" page 14.  Visa: Valid range is 0.01 to 0.99 (1% to 99%, with only whole percentage values accepted; values with additional decimal places will be truncated).  Mastercard: Valid range is 0.00001 to 0.99999 (0.001% to 99.999%). 
+    # Tax rate applied to the item.  For details, see `tax_rate` field description in the [Level II and Level III Processing Using the SCMP API Guide.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/)  **Visa**: Valid range is 0.01 to 0.99 (1% to 99%, with only whole percentage values accepted; values with additional decimal places will be truncated).  **Mastercard**: Valid range is 0.00001 to 0.99999 (0.001% to 99.999%). 
     attr_accessor :tax_rate
 
     # Flag to indicate how you handle discount at the line item level.   - 0: no line level discount provided  - 1: tax was calculated on the post-discount line item total  - 2: tax was calculated on the pre-discount line item total  `Note` Visa will inset 0 (zero) if an invalid value is included in this field.  This field relates to the value in the _lineItems[].discountAmount_ field. 
@@ -47,7 +47,7 @@ module CyberSource
     # Flag to indicate whether tax is exempted or not included.   - 0: tax not included  - 1: tax included  - 2: transaction is not subject to tax 
     attr_accessor :tax_status_indicator
 
-    # Type of tax being applied to the item. Possible values:  Below values are used by **RBS WorldPay Atlanta**, **FDC Nashville Global**, **Litle**   - 0000: unknown tax type  - 0001: federal/national sales tax  - 0002: state sales tax  - 0003: city sales tax  - 0004: local sales tax  - 0005: municipal sales tax  - 0006: other tax  - 0010: value-added tax (VAT)  - 0011: goods and services tax (GST)  - 0012: provincial sales tax  - 0013: harmonized sales tax  - 0014: Quebec sales tax (QST)  - 0020: room tax  - 0021: occupancy tax  - 0022: energy tax  - 0023: city tax  - 0024: county or parish sales tax  - 0025: county tax  - 0026: environment tax  - 0027: state and local sales tax (combined)  - Blank: Tax not supported on line item. 
+    # Type of tax being applied to the item.  For possible values, see the processor-specific field descriptions in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/):  #### FDC Nashville Global - `alternate_tax_type_applied` - `alternate_tax_type_identifier`  #### Worldpay VAP - `alternate_tax_type_identifier`  #### RBS WorldPay Atlanta - `tax_type_applied`  #### TSYS Acquiring Solutions - `tax_type_applied` - `local_tax_indicator`  #### Chase Paymentech Solutions - `tax_type_applied`  #### Elavon Americas - `local_tax_indicator`  #### FDC Compass - `tax_type_applied`  #### OmniPay Direct - `local_tax_indicator` 
     attr_accessor :tax_type_code
 
     # Flag that indicates whether the tax amount is included in the Line Item Total.  Possible values:  - **true**  - **false** 
@@ -73,23 +73,37 @@ module CyberSource
 
     attr_accessor :tax_details
 
-    # The description for this field is not available.
+    # Information about the product code used for the line item. Possible values: - `E`: The product code is `electronic_software`. - `P`: The product code is not `electronic_software`.  For details, see the `fulfillmentType` field description in [Business Center Reporting User Guide.] (https://apps.cybersource.com/library/documentation/dev_guides/reporting_and_reconciliation/Reporting_User/html/) 
     attr_accessor :fulfillment_type
 
-    # Weight of the item. See Numbered Elements.
+    # Weight of the item.  For details, see `weight_amount` field description in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/) 
     attr_accessor :weight
 
-    # Type of weight. See Numbered Elements.  Possible values: - B: Billed weight - N: Actual net weight 
+    # Type of weight.  Possible values: - B: Billed weight - N: Actual net weight  For details, see `weight_identifier` offer-level field description in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/) 
     attr_accessor :weight_identifier
 
-    # Code that specifies the unit of measurement for the weight amount. For example, OZ specifies ounce and LB specifies pound. The possible values are defined by the ANSI Accredited Standards Committee (ASC).  See Numbered Elements. 
+    # Code that specifies the unit of measurement for the weight amount. For example, `OZ` specifies ounce and `LB` specifies pound. The possible values are defined by the ANSI Accredited Standards Committee (ASC).  For details, see `weight_unit_measurement` offer-level field description in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/) 
     attr_accessor :weight_unit
 
-    # Code that identifies the value of the corresponding item_#_referenceData_#_number field. See Numbered Elements.  Possible values: - AN: Client-defined asset code - MG: Manufacturer's part number - PO: Purchase order number - SK: Supplier stock keeping unit number - UP: Universal product code - VC: Supplier catalog number - VP: Vendor part number  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
+    # Code that identifies the value of the corresponding `orderInformation.lineItems[].referenceDataNumber` field.  Possible values: - AN: Client-defined asset code - MG: Manufacturer's part number - PO: Purchase order number - SK: Supplier stock keeping unit number - UP: Universal product code - VC: Supplier catalog number - VP: Vendor part number  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor.  For details, see `reference_data_#_code` field description in [Level II and Level III Processing Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/Level_2_3_SCMP_API/html/) 
     attr_accessor :reference_data_code
 
     # Reference number.  The meaning of this value is identified by the value of the corresponding `referenceDataCode` field. See Numbered Elements.  The maximum length for this field depends on the value of the corresponding `referenceDataCode` field: - When the code is `PO`, the maximum length for the reference number is 22. - When the code is `VC`, the maximum length for the reference number is 20. - For all other codes, the maximum length for the reference number is 30.  This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. 
     attr_accessor :reference_data_number
+
+    # Brief description of item.
+    attr_accessor :product_description
+
+    # When `orderInformation.lineItems[].productCode` is \"gift_card\", this is the currency used for the gift card purchase.  For details, see `pa_gift_card_currency` field description in [CyberSource Payer Authentication Using the SCMP API.] (https://apps.cybersource.com/library/documentation/dev_guides/Payer_Authentication_SCMP_API/Payer_Authentication_SCMP_API.pdf)  For the possible values, see the [ISO Standard Currency Codes.](http://apps.cybersource.com/library/documentation/sbc/quickref/currencies.pdf) 
+    attr_accessor :gift_card_currency
+
+    # Destination to where the item will be shipped. Example: Commercial, Residential, Store 
+    attr_accessor :shipping_destination_types
+
+    # This field is only used in DM service.  Determines whether to assign risk to the order if the billing and shipping addresses specify different cities, states, or countries. This field can contain one of the following values: - true: Orders are assigned only slight additional risk if billing and shipping addresses are different. - false: Orders are assigned higher additional risk if billing and shipping addresses are different. 
+    attr_accessor :gift
+
+    attr_accessor :passenger
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -119,7 +133,12 @@ module CyberSource
         :'weight_identifier' => :'weightIdentifier',
         :'weight_unit' => :'weightUnit',
         :'reference_data_code' => :'referenceDataCode',
-        :'reference_data_number' => :'referenceDataNumber'
+        :'reference_data_number' => :'referenceDataNumber',
+        :'product_description' => :'productDescription',
+        :'gift_card_currency' => :'giftCardCurrency',
+        :'shipping_destination_types' => :'shippingDestinationTypes',
+        :'gift' => :'gift',
+        :'passenger' => :'passenger'
       }
     end
 
@@ -129,7 +148,7 @@ module CyberSource
         :'product_code' => :'String',
         :'product_name' => :'String',
         :'product_sku' => :'String',
-        :'quantity' => :'Float',
+        :'quantity' => :'Integer',
         :'unit_price' => :'String',
         :'unit_of_measure' => :'String',
         :'total_amount' => :'String',
@@ -151,7 +170,12 @@ module CyberSource
         :'weight_identifier' => :'String',
         :'weight_unit' => :'String',
         :'reference_data_code' => :'String',
-        :'reference_data_number' => :'String'
+        :'reference_data_number' => :'String',
+        :'product_description' => :'String',
+        :'gift_card_currency' => :'Integer',
+        :'shipping_destination_types' => :'String',
+        :'gift' => :'BOOLEAN',
+        :'passenger' => :'Ptsv2paymentsOrderInformationPassenger'
       }
     end
 
@@ -268,6 +292,26 @@ module CyberSource
       if attributes.has_key?(:'referenceDataNumber')
         self.reference_data_number = attributes[:'referenceDataNumber']
       end
+
+      if attributes.has_key?(:'productDescription')
+        self.product_description = attributes[:'productDescription']
+      end
+
+      if attributes.has_key?(:'giftCardCurrency')
+        self.gift_card_currency = attributes[:'giftCardCurrency']
+      end
+
+      if attributes.has_key?(:'shippingDestinationTypes')
+        self.shipping_destination_types = attributes[:'shippingDestinationTypes']
+      end
+
+      if attributes.has_key?(:'gift')
+        self.gift = attributes[:'gift']
+      end
+
+      if attributes.has_key?(:'passenger')
+        self.passenger = attributes[:'passenger']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -286,8 +330,8 @@ module CyberSource
         invalid_properties.push('invalid value for "product_sku", the character length must be smaller than or equal to 255.')
       end
 
-      if !@quantity.nil? && @quantity > 9999999999
-        invalid_properties.push('invalid value for "quantity", must be smaller than or equal to 9999999999.')
+      if !@quantity.nil? && @quantity > 999999999
+        invalid_properties.push('invalid value for "quantity", must be smaller than or equal to 999999999.')
       end
 
       if !@quantity.nil? && @quantity < 1
@@ -366,6 +410,10 @@ module CyberSource
         invalid_properties.push('invalid value for "reference_data_number", the character length must be smaller than or equal to 30.')
       end
 
+      if !@shipping_destination_types.nil? && @shipping_destination_types.to_s.length > 50
+        invalid_properties.push('invalid value for "shipping_destination_types", the character length must be smaller than or equal to 50.')
+      end
+
       invalid_properties
     end
 
@@ -375,7 +423,7 @@ module CyberSource
       return false if !@product_code.nil? && @product_code.to_s.length > 255
       return false if !@product_name.nil? && @product_name.to_s.length > 255
       return false if !@product_sku.nil? && @product_sku.to_s.length > 255
-      return false if !@quantity.nil? && @quantity > 9999999999
+      return false if !@quantity.nil? && @quantity > 999999999
       return false if !@quantity.nil? && @quantity < 1
       return false if !@unit_price.nil? && @unit_price.to_s.length > 15
       return false if !@unit_of_measure.nil? && @unit_of_measure.to_s.length > 12
@@ -395,6 +443,7 @@ module CyberSource
       return false if !@weight_unit.nil? && @weight_unit.to_s.length > 2
       return false if !@reference_data_code.nil? && @reference_data_code.to_s.length > 2
       return false if !@reference_data_number.nil? && @reference_data_number.to_s.length > 30
+      return false if !@shipping_destination_types.nil? && @shipping_destination_types.to_s.length > 50
       true
     end
 
@@ -431,8 +480,8 @@ module CyberSource
     # Custom attribute writer method with validation
     # @param [Object] quantity Value to be assigned
     def quantity=(quantity)
-      if !quantity.nil? && quantity > 9999999999
-        fail ArgumentError, 'invalid value for "quantity", must be smaller than or equal to 9999999999.'
+      if !quantity.nil? && quantity > 999999999
+        fail ArgumentError, 'invalid value for "quantity", must be smaller than or equal to 999999999.'
       end
 
       if !quantity.nil? && quantity < 1
@@ -622,6 +671,16 @@ module CyberSource
       @reference_data_number = reference_data_number
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] shipping_destination_types Value to be assigned
+    def shipping_destination_types=(shipping_destination_types)
+      if !shipping_destination_types.nil? && shipping_destination_types.to_s.length > 50
+        fail ArgumentError, 'invalid value for "shipping_destination_types", the character length must be smaller than or equal to 50.'
+      end
+
+      @shipping_destination_types = shipping_destination_types
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -652,7 +711,12 @@ module CyberSource
           weight_identifier == o.weight_identifier &&
           weight_unit == o.weight_unit &&
           reference_data_code == o.reference_data_code &&
-          reference_data_number == o.reference_data_number
+          reference_data_number == o.reference_data_number &&
+          product_description == o.product_description &&
+          gift_card_currency == o.gift_card_currency &&
+          shipping_destination_types == o.shipping_destination_types &&
+          gift == o.gift &&
+          passenger == o.passenger
     end
 
     # @see the `==` method
@@ -664,7 +728,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [product_code, product_name, product_sku, quantity, unit_price, unit_of_measure, total_amount, tax_amount, tax_rate, tax_applied_after_discount, tax_status_indicator, tax_type_code, amount_includes_tax, type_of_supply, commodity_code, discount_amount, discount_applied, discount_rate, invoice_number, tax_details, fulfillment_type, weight, weight_identifier, weight_unit, reference_data_code, reference_data_number].hash
+      [product_code, product_name, product_sku, quantity, unit_price, unit_of_measure, total_amount, tax_amount, tax_rate, tax_applied_after_discount, tax_status_indicator, tax_type_code, amount_includes_tax, type_of_supply, commodity_code, discount_amount, discount_applied, discount_rate, invoice_number, tax_details, fulfillment_type, weight, weight_identifier, weight_unit, reference_data_code, reference_data_number, product_description, gift_card_currency, shipping_destination_types, gift, passenger].hash
     end
 
     # Builds the object from hash

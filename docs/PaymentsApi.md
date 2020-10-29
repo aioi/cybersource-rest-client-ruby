@@ -4,7 +4,8 @@ All URIs are relative to *https://apitest.cybersource.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_payment**](PaymentsApi.md#create_payment) | **POST** /pts/v2/payments/ | Process a Payment
+[**create_payment**](PaymentsApi.md#create_payment) | **POST** /pts/v2/payments | Process a Payment
+[**increment_auth**](PaymentsApi.md#increment_auth) | **PATCH** /pts/v2/payments/{id} | Increment an Authorization
 
 
 # **create_payment**
@@ -12,7 +13,7 @@ Method | HTTP request | Description
 
 Process a Payment
 
-Authorize the payment for the transaction. 
+A payment authorizes the amount for the transaction. There are a number of supported payment feature, such as E-commerce and Card Present - Credit Card/Debit Card, Echeck, e-Wallets, Level II/III Data, etc..  A payment response includes the status of the request. It also includes processor-specific information when the request is successful and errors if unsuccessful. See the [Payments Developer Guides Page](https://developer.cybersource.com/api/developer-guides/dita-payments/GettingStarted.html).  Authorization can be requested with Capture, Decision Manager, Payer Authentication(3ds), and Token Creation. Find more on [Authorization with Add-On Features page.] (https://developer.cybersource.com/api/authorization-add-ons.html)  Possible [RESPONSE CODES](https://developer.cybersource.com/api/reference/response-codes.html) .  Processor specific [Testing Triggers](https://developer.cybersource.com/hello-world/testing-guide.html). 
 
 ### Example
 ```ruby
@@ -50,7 +51,57 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json;charset=utf-8
- - **Accept**: application/json;charset=utf-8
+ - **Accept**: application/hal+json;charset=utf-8
+
+
+
+# **increment_auth**
+> PtsV2IncrementalAuthorizationPatch201Response increment_auth(id, increment_auth_request)
+
+Increment an Authorization
+
+Use this service to authorize additional charges in a lodging or autorental transaction. Include the ID returned from the original authorization in the PATCH request to add additional charges to that authorization. 
+
+### Example
+```ruby
+# load the gem
+require 'cybersource_rest_client'
+
+api_instance = CyberSource::PaymentsApi.new
+
+id = "id_example" # String | The ID returned from the original authorization request.
+
+increment_auth_request = CyberSource::IncrementAuthRequest.new # IncrementAuthRequest | 
+
+
+begin
+  #Increment an Authorization
+  result = api_instance.increment_auth(id, increment_auth_request)
+  p result
+rescue CyberSource::ApiError => e
+  puts "Exception when calling PaymentsApi->increment_auth: #{e}"
+end
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**| The ID returned from the original authorization request. | 
+ **increment_auth_request** | [**IncrementAuthRequest**](IncrementAuthRequest.md)|  | 
+
+### Return type
+
+[**PtsV2IncrementalAuthorizationPatch201Response**](PtsV2IncrementalAuthorizationPatch201Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json;charset=utf-8
+ - **Accept**: application/hal+json;charset=utf-8
 
 
 

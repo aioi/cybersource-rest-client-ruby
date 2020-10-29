@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **String** | Mapped response code for Verified by Visa and American Express SafeKey:  | [optional] 
-**code_raw** | **String** | Raw response code sent directly from the processor for Verified by Visa and American Express SafeKey:  | [optional] 
+**code** | **String** | Mapped response code for Visa Secure and American Express SafeKey.  | [optional] 
+**code_raw** | **String** | Raw response code sent directly from the processor for Visa Secure and American Express SafeKey:  | [optional] 
 
 

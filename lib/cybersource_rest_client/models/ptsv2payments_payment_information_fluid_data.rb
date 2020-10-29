@@ -14,13 +14,13 @@ require 'date'
 
 module CyberSource
   class Ptsv2paymentsPaymentInformationFluidData
-    # The name of the merchant-defined data field. The range of this field starts at 1 and terminiates at 100.
-    attr_accessor :key
+    # The encoded or encrypted value that a payment solution returns for an authorization request. For details about the valid values for a key, see [Creating an Online Authorization](https://developer.cybersource.com/api/developer-guides/dita-payments/CreatingOnlineAuth.html) 
+    attr_accessor :key_serial_number
 
-    # The specific string for identifying the payment solution that is sending the encrypted payment data to CyberSource. Valid values: - `Apple Pay` - `Samsung Pay` **NOTE**: For other payment solutions, the value may be specific to the customer's mobile device. For example, the descriptor for a Bluefin payment encryption would be a device-generated descriptor. Merchant needs to pass in this value. 
+    # The identifier for a payment solution, which is sending the encrypted payment data for decryption. Valid values: - Samsung Pay: `RklEPUNPTU1PTi5TQU1TVU5HLklOQVBQLlBBWU1FTlQ=`  **Note**: For other payment solutions, the value may be specific to the customer's mobile device. For example, the descriptor for a Bluefin payment encryption would be a device-generated descriptor.  #### Used by **Authorization and Standalone Credits** Required for authorizations and standalone credits that use Bluefin PCI P2PE.  #### Card Present processing Format of the encrypted payment data. The value for Bluefin PCI P2PE is `Ymx1ZWZpbg==`. 
     attr_accessor :descriptor
 
-    # Represents the encrypted payment data BLOB. The entry for this field is dependent on the payment solution a merchant uses.  Valid values: - Apple Pay: `RklEPUNPTU1PTi5BUFBMRS5JTkFQUC5QQVlNRU5U` - Samsung Pay: `RklEPUNPTU1PTi5TQU1TVU5HLklOQVBQLlBBWU1FTlQ=` **NOTE**: For other payment solutions, the value of the descriptor may be specific to the customer's mobile device. For example, the descriptor for a Bluefin payment encryption would be a device-generated descriptor. Merchant needs to pass in this value. 
+    # Represents the encrypted payment data BLOB. The entry for this field is dependent on the payment solution a merchant uses.  #### Used by **Authorization and Standalone Credits** Required for authorizations and standalone credits that use Bluefin PCI P2PE.  #### Card Present processing This field represents the encrypted Bluefin PCI P2PE payment data. Obtain the encrypted payment data from a Bluefin-supported device. 
     attr_accessor :value
 
     # Encoding method used to encrypt the payment data.  Valid value: Base64 
@@ -29,7 +29,7 @@ module CyberSource
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'key' => :'key',
+        :'key_serial_number' => :'keySerialNumber',
         :'descriptor' => :'descriptor',
         :'value' => :'value',
         :'encoding' => :'encoding'
@@ -39,7 +39,7 @@ module CyberSource
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'key' => :'String',
+        :'key_serial_number' => :'String',
         :'descriptor' => :'String',
         :'value' => :'String',
         :'encoding' => :'String'
@@ -54,8 +54,8 @@ module CyberSource
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'key')
-        self.key = attributes[:'key']
+      if attributes.has_key?(:'keySerialNumber')
+        self.key_serial_number = attributes[:'keySerialNumber']
       end
 
       if attributes.has_key?(:'descriptor')
@@ -134,7 +134,7 @@ module CyberSource
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          key == o.key &&
+          key_serial_number == o.key_serial_number &&
           descriptor == o.descriptor &&
           value == o.value &&
           encoding == o.encoding
@@ -149,7 +149,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [key, descriptor, value, encoding].hash
+      [key_serial_number, descriptor, value, encoding].hash
     end
 
     # Builds the object from hash

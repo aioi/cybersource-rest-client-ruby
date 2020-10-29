@@ -20,31 +20,31 @@ module CyberSource
       @api_client = api_client
 	  @api_client.set_configuration(config)
     end
-    # Get payment batch summary data
+    # Get Payment Batch Summary Data
     # Scope can be either account/merchant or reseller.
-    # @param start_time Valid report Start Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
-    # @param end_time Valid report End Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
+    # @param start_time Valid report Start Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)  **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
+    # @param end_time Valid report End Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)  **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :organization_id Valid Cybersource Organization Id
-    # @option opts [String] :roll_up Conditional - RollUp for data for DAY/WEEK/MONTH. Required while getting breakdown data for a Merchant
-    # @option opts [String] :breakdown Conditional - Breakdown on account_rollup/allMerchants/selectedMerchant. Required while getting breakdown data for a Merchant.
+    # @option opts [String] :roll_up Conditional - RollUp for data for day/week/month. Required while getting breakdown data for a Merchant
+    # @option opts [String] :breakdown Conditional - Breakdown on account_rollup/all_merchant/selected_merchant. Required while getting breakdown data for a Merchant.
     # @option opts [Integer] :start_day_of_week Optional - Start day of week to breakdown data for weeks in a month
-    # @return [InlineResponse200]
+    # @return [ReportingV3PaymentBatchSummariesGet200Response]
     def get_payment_batch_summary(start_time, end_time, opts = {})
       data, status_code, headers = get_payment_batch_summary_with_http_info(start_time, end_time, opts)
       return data, status_code, headers
     end
 
-    # Get payment batch summary data
+    # Get Payment Batch Summary Data
     # Scope can be either account/merchant or reseller.
-    # @param start_time Valid report Start Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
-    # @param end_time Valid report End Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format. - https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14   **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
+    # @param start_time Valid report Start Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)  **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
+    # @param end_time Valid report End Time in **ISO 8601 format** Please refer the following link to know more about ISO 8601 format.[Rfc Date Format](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)  **Example date format:**   - yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSZ (e.g. 2018-01-01T00:00:00.000Z) 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :organization_id Valid Cybersource Organization Id
-    # @option opts [String] :roll_up Conditional - RollUp for data for DAY/WEEK/MONTH. Required while getting breakdown data for a Merchant
-    # @option opts [String] :breakdown Conditional - Breakdown on account_rollup/allMerchants/selectedMerchant. Required while getting breakdown data for a Merchant.
+    # @option opts [String] :roll_up Conditional - RollUp for data for day/week/month. Required while getting breakdown data for a Merchant
+    # @option opts [String] :breakdown Conditional - Breakdown on account_rollup/all_merchant/selected_merchant. Required while getting breakdown data for a Merchant.
     # @option opts [Integer] :start_day_of_week Optional - Start day of week to breakdown data for weeks in a month
-    # @return [Array<(InlineResponse200, Fixnum, Hash)>] InlineResponse200 data, response status code and response headers
+    # @return [Array<(ReportingV3PaymentBatchSummariesGet200Response, Fixnum, Hash)>] ReportingV3PaymentBatchSummariesGet200Response data, response status code and response headers
     def get_payment_batch_summary_with_http_info(start_time, end_time, opts = {})
       
 	  if @api_client.config.debugging
@@ -75,12 +75,6 @@ module CyberSource
         #fail ArgumentError, "invalid value for 'opts[:\"organization_id\"]' when calling PaymentBatchSummariesApi.get_payment_batch_summary, must conform to the pattern /[a-zA-Z0-9-_]+/."
       #end
 
-      if @api_client.config.client_side_validation && opts[:'roll_up'] && !['day', 'week', 'month'].include?(opts[:'roll_up'])
-        fail ArgumentError, 'invalid value for "roll_up", must be one of day, week, month'
-      end
-      if @api_client.config.client_side_validation && opts[:'breakdown'] && !['account_rollup', 'all_merchant', 'selected_merchant'].include?(opts[:'breakdown'])
-        fail ArgumentError, 'invalid value for "breakdown", must be one of account_rollup, all_merchant, selected_merchant'
-      end
       if @api_client.config.client_side_validation && !opts[:'start_day_of_week'].nil? && opts[:'start_day_of_week'] > 7
         fail ArgumentError, 'invalid value for "opts[:"start_day_of_week"]" when calling PaymentBatchSummariesApi.get_payment_batch_summary, must be smaller than or equal to 7.'
       end
@@ -104,7 +98,7 @@ module CyberSource
       # header parameters
       header_params = {}
       # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/hal+json'])
+      header_params['Accept'] = @api_client.select_header_accept(['application/hal+json', 'text/csv', 'application/xml'])
       # HTTP header 'Content-Type'
       header_params['Content-Type'] = @api_client.select_header_content_type(['application/json;charset=utf-8'])
 
@@ -120,7 +114,7 @@ module CyberSource
         :form_params => form_params,
         :body => post_body,
         :auth_names => auth_names,
-        :return_type => 'InlineResponse200')
+        :return_type => 'ReportingV3PaymentBatchSummariesGet200Response')
       if @api_client.config.debugging
 		begin
 		raise

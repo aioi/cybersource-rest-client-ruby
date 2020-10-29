@@ -14,13 +14,13 @@ require 'date'
 
 module CyberSource
   class TssV2TransactionsGet200ResponseDeviceInformation
-    # Customer’s IP address, such as 10.1.27.63, reported by your Web server via socket information. 
+    # IP address of the customer.  #### Used by **Authorization, Capture, and Credit** Optional field. 
     attr_accessor :ip_address
 
-    # Host name reported by the customer’s browser to your Web server identified via the HTTP header.
+    # DNS resolved hostname from `ipAddress`.
     attr_accessor :host_name
 
-    # Boolean that indicates whether the customer’s browser accepts cookies. This field can contain one of the following values:   - `yes`: The customer’s browser accepts cookies.   - `no`: The customer’s browser does not accept cookies. 
+    # Whether the customer’s browser accepts cookies. This field can contain one of the following values: - `yes`: The customer’s browser accepts cookies. - `no`: The customer’s browser does not accept cookies. 
     attr_accessor :cookies_accepted
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -66,8 +66,8 @@ module CyberSource
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if !@ip_address.nil? && @ip_address.to_s.length > 15
-        invalid_properties.push('invalid value for "ip_address", the character length must be smaller than or equal to 15.')
+      if !@ip_address.nil? && @ip_address.to_s.length > 48
+        invalid_properties.push('invalid value for "ip_address", the character length must be smaller than or equal to 48.')
       end
 
       if !@host_name.nil? && @host_name.to_s.length > 60
@@ -80,7 +80,7 @@ module CyberSource
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if !@ip_address.nil? && @ip_address.to_s.length > 15
+      return false if !@ip_address.nil? && @ip_address.to_s.length > 48
       return false if !@host_name.nil? && @host_name.to_s.length > 60
       true
     end
@@ -88,8 +88,8 @@ module CyberSource
     # Custom attribute writer method with validation
     # @param [Object] ip_address Value to be assigned
     def ip_address=(ip_address)
-      if !ip_address.nil? && ip_address.to_s.length > 15
-        fail ArgumentError, 'invalid value for "ip_address", the character length must be smaller than or equal to 15.'
+      if !ip_address.nil? && ip_address.to_s.length > 48
+        fail ArgumentError, 'invalid value for "ip_address", the character length must be smaller than or equal to 48.'
       end
 
       @ip_address = ip_address

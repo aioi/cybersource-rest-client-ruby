@@ -44,6 +44,12 @@ describe 'PtsV2PaymentsPost201ResponsePaymentInformationAccountFeatures' do
     end
   end
 
+  describe 'test attribute "balances"' do
+    it 'should work' do
+      # assertion here. ref: https://www.relishapp.com/rspec/rspec-expectations/docs/built-in-matchers
+    end
+  end
+
   describe 'test attribute "balance_amount"' do
     it 'should work' do
       # assertion here. ref: https://www.relishapp.com/rspec/rspec-expectations/docs/built-in-matchers
@@ -65,10 +71,6 @@ describe 'PtsV2PaymentsPost201ResponsePaymentInformationAccountFeatures' do
   describe 'test attribute "balance_sign"' do
     it 'should work' do
       # assertion here. ref: https://www.relishapp.com/rspec/rspec-expectations/docs/built-in-matchers
-      # validator = Petstore::EnumTest::EnumAttributeValidator.new('String', ["+", "-"])
-      # validator.allowable_values.each do |value|
-      #   expect { @instance.balance_sign = value }.not_to raise_error
-      # end
     end
   end
 

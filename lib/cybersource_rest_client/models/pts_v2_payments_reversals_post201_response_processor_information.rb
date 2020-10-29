@@ -17,19 +17,19 @@ module CyberSource
     # Processor transaction ID.  This value identifies the transaction on a host system. This value is supported only for Moneris. It contains this information:   - Terminal used to process the transaction  - Shift during which the transaction took place  - Batch number  - Transaction number within the batch  You must store this value. If you give the customer a receipt, display this value on the receipt.  Example For the value 66012345001069003:   - Terminal ID = 66012345  - Shift number = 001  - Batch number = 069  - Transaction number = 003 
     attr_accessor :transaction_id
 
-    # For most processors, this is the error message sent directly from the bank. Returned only when the processor returns this value.  Important Do not use this field to evaluate the result of the authorization. 
+    # For most processors, this is the error message sent directly from the bank. Returned only when the processor returns this value.  **Important** Do not use this field to evaluate the result of the authorization.  #### PIN debit Response value that is returned by the processor or bank. **Important** Do not use this field to evaluate the results of the transaction request.  Returned by PIN debit credit, PIN debit purchase, and PIN debit reversal.  #### AIBMS If this value is `08`, you can accept the transaction if the customer provides you with identification.  #### Atos This value is the response code sent from Atos and it might also include the response code from the bank. Format: `aa,bb` with the two values separated by a comma and where: - `aa` is the two-digit error message from Atos. - `bb` is the optional two-digit error message from the bank.  #### Comercio Latino This value is the status code and the error or response code received from the processor separated by a colon. Format: [status code]:E[error code] or [status code]:R[response code] Example `2:R06`  #### JCN Gateway Processor-defined detail error code. The associated response category code is in the `processorInformation.responseCategoryCode` field. String (3) 
     attr_accessor :response_code
 
-    # Processor-defined response category code. The associated detail error code is in the auth_auth_response field or the auth_reversal_auth_ response field depending on which service you requested.  This field is supported only for:   - Japanese issuers  - Domestic transactions in Japan  - Comercio Latino—processor transaction ID required for troubleshooting  **Maximum length for processors**:   - Comercio Latino: 32  - All other processors: 3 
+    # Processor-defined response category code. The associated detail error code is in the `processorInformation.responseCode` or `issuerInformation.responseCode` field of the service you requested.  This field is supported only for:   - Japanese issuers  - Domestic transactions in Japan  - Comercio Latino—processor transaction ID required for troubleshooting  #### Maximum length for processors   - Comercio Latino: 36  - All other processors: 3 
     attr_accessor :response_category_code
 
-    # Name of the Japanese acquirer that processed the transaction. Returned only for CCS (CAFIS) and JCN Gateway. Please contact the CyberSource Japan Support Group for more information. 
+    # Name of the Japanese acquirer that processed the transaction. Returned only for JCN Gateway. Please contact the CyberSource Japan Support Group for more information. 
     attr_accessor :forwarded_acquirer_code
 
-    # Mastercard service that was used for the transaction. Mastercard provides this value to CyberSource.  Possible value:  - 53: Mastercard card-on-file token service 
+    # Mastercard service that was used for the transaction. Mastercard provides this value to CyberSource.  Possible value:  - 53: Mastercard card-on-file token service  #### CyberSource through VisaNet The value for this field corresponds to the following data in the TC 33 capture file: - Record: CP01 TCR6 - Position: 133-134 - Field: Mastercard Merchant on-behalf service. **Note** This field is returned only for CyberSource through VisaNet. 
     attr_accessor :master_card_service_code
 
-    # Result of the Mastercard card-on-file token service. Mastercard provides this value to CyberSource.  Possible values:   - **C**: Service completed successfully.  - **F**: One of the following:    - Incorrect Mastercard POS entry mode. The Mastercard POS entry mode should be 81 for an authorization or      authorization reversal.    - Incorrect Mastercard POS entry mode. The Mastercard POS entry mode should be 01 for a tokenized request.    - Token requestor ID is missing or formatted incorrectly.  - **I**: One of the following:    - Invalid token requestor ID.    - Suspended or deactivated token.    - Invalid token (not in mapping table).  - **T**: Invalid combination of token requestor ID and token.  - **U**: Expired token.  - **W**: Primary account number (PAN) listed in electronic warning bulletin.  Note This field is returned only for **CyberSource through VisaNet**. 
+    # Result of the Mastercard card-on-file token service. Mastercard provides this value to CyberSource.  Possible values:   - `C`: Service completed successfully.  - `F`: One of the following:    - Incorrect Mastercard POS entry mode. The Mastercard POS entry mode should be 81 for an authorization or      authorization reversal.    - Incorrect Mastercard POS entry mode. The Mastercard POS entry mode should be 01 for a tokenized request.    - Token requestor ID is missing or formatted incorrectly.  - `I`: One of the following:    - Invalid token requestor ID.    - Suspended or deactivated token.    - Invalid token (not in mapping table).  - `T`: Invalid combination of token requestor ID and token.  - `U`: Expired token.  - `W`: Primary account number (PAN) listed in electronic warning bulletin.  **Note** This field is returned only for **CyberSource through VisaNet**. 
     attr_accessor :master_card_service_reply_code
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -101,8 +101,8 @@ module CyberSource
         invalid_properties.push('invalid value for "response_code", the character length must be smaller than or equal to 10.')
       end
 
-      if !@response_category_code.nil? && @response_category_code.to_s.length > 32
-        invalid_properties.push('invalid value for "response_category_code", the character length must be smaller than or equal to 32.')
+      if !@response_category_code.nil? && @response_category_code.to_s.length > 36
+        invalid_properties.push('invalid value for "response_category_code", the character length must be smaller than or equal to 36.')
       end
 
       if !@forwarded_acquirer_code.nil? && @forwarded_acquirer_code.to_s.length > 32
@@ -125,7 +125,7 @@ module CyberSource
     def valid?
       return false if !@transaction_id.nil? && @transaction_id.to_s.length > 18
       return false if !@response_code.nil? && @response_code.to_s.length > 10
-      return false if !@response_category_code.nil? && @response_category_code.to_s.length > 32
+      return false if !@response_category_code.nil? && @response_category_code.to_s.length > 36
       return false if !@forwarded_acquirer_code.nil? && @forwarded_acquirer_code.to_s.length > 32
       return false if !@master_card_service_code.nil? && @master_card_service_code.to_s.length > 2
       return false if !@master_card_service_reply_code.nil? && @master_card_service_reply_code.to_s.length > 1
@@ -155,8 +155,8 @@ module CyberSource
     # Custom attribute writer method with validation
     # @param [Object] response_category_code Value to be assigned
     def response_category_code=(response_category_code)
-      if !response_category_code.nil? && response_category_code.to_s.length > 32
-        fail ArgumentError, 'invalid value for "response_category_code", the character length must be smaller than or equal to 32.'
+      if !response_category_code.nil? && response_category_code.to_s.length > 36
+        fail ArgumentError, 'invalid value for "response_category_code", the character length must be smaller than or equal to 36.'
       end
 
       @response_category_code = response_category_code

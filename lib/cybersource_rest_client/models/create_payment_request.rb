@@ -38,10 +38,24 @@ module CyberSource
 
     attr_accessor :point_of_sale_information
 
-    # The description for this field is not available.
+    # The object containing the custom data that the merchant defines. 
     attr_accessor :merchant_defined_information
 
     attr_accessor :installment_information
+
+    attr_accessor :travel_information
+
+    attr_accessor :health_care_information
+
+    attr_accessor :promotion_information
+
+    attr_accessor :token_information
+
+    attr_accessor :risk_information
+
+    attr_accessor :acquirer_information
+
+    attr_accessor :recurring_payment_information
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -59,7 +73,14 @@ module CyberSource
         :'consumer_authentication_information' => :'consumerAuthenticationInformation',
         :'point_of_sale_information' => :'pointOfSaleInformation',
         :'merchant_defined_information' => :'merchantDefinedInformation',
-        :'installment_information' => :'installmentInformation'
+        :'installment_information' => :'installmentInformation',
+        :'travel_information' => :'travelInformation',
+        :'health_care_information' => :'healthCareInformation',
+        :'promotion_information' => :'promotionInformation',
+        :'token_information' => :'tokenInformation',
+        :'risk_information' => :'riskInformation',
+        :'acquirer_information' => :'acquirerInformation',
+        :'recurring_payment_information' => :'recurringPaymentInformation'
       }
     end
 
@@ -79,7 +100,14 @@ module CyberSource
         :'consumer_authentication_information' => :'Ptsv2paymentsConsumerAuthenticationInformation',
         :'point_of_sale_information' => :'Ptsv2paymentsPointOfSaleInformation',
         :'merchant_defined_information' => :'Array<Ptsv2paymentsMerchantDefinedInformation>',
-        :'installment_information' => :'Ptsv2paymentsInstallmentInformation'
+        :'installment_information' => :'Ptsv2paymentsInstallmentInformation',
+        :'travel_information' => :'Ptsv2paymentsTravelInformation',
+        :'health_care_information' => :'Ptsv2paymentsHealthCareInformation',
+        :'promotion_information' => :'Ptsv2paymentsPromotionInformation',
+        :'token_information' => :'Ptsv2paymentsTokenInformation',
+        :'risk_information' => :'Ptsv2paymentsRiskInformation',
+        :'acquirer_information' => :'Ptsv2paymentsAcquirerInformation',
+        :'recurring_payment_information' => :'Ptsv2paymentsRecurringPaymentInformation'
       }
     end
 
@@ -148,6 +176,34 @@ module CyberSource
       if attributes.has_key?(:'installmentInformation')
         self.installment_information = attributes[:'installmentInformation']
       end
+
+      if attributes.has_key?(:'travelInformation')
+        self.travel_information = attributes[:'travelInformation']
+      end
+
+      if attributes.has_key?(:'healthCareInformation')
+        self.health_care_information = attributes[:'healthCareInformation']
+      end
+
+      if attributes.has_key?(:'promotionInformation')
+        self.promotion_information = attributes[:'promotionInformation']
+      end
+
+      if attributes.has_key?(:'tokenInformation')
+        self.token_information = attributes[:'tokenInformation']
+      end
+
+      if attributes.has_key?(:'riskInformation')
+        self.risk_information = attributes[:'riskInformation']
+      end
+
+      if attributes.has_key?(:'acquirerInformation')
+        self.acquirer_information = attributes[:'acquirerInformation']
+      end
+
+      if attributes.has_key?(:'recurringPaymentInformation')
+        self.recurring_payment_information = attributes[:'recurringPaymentInformation']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -181,7 +237,14 @@ module CyberSource
           consumer_authentication_information == o.consumer_authentication_information &&
           point_of_sale_information == o.point_of_sale_information &&
           merchant_defined_information == o.merchant_defined_information &&
-          installment_information == o.installment_information
+          installment_information == o.installment_information &&
+          travel_information == o.travel_information &&
+          health_care_information == o.health_care_information &&
+          promotion_information == o.promotion_information &&
+          token_information == o.token_information &&
+          risk_information == o.risk_information &&
+          acquirer_information == o.acquirer_information &&
+          recurring_payment_information == o.recurring_payment_information
     end
 
     # @see the `==` method
@@ -193,7 +256,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [client_reference_information, processing_information, issuer_information, payment_information, order_information, buyer_information, recipient_information, device_information, merchant_information, aggregator_information, consumer_authentication_information, point_of_sale_information, merchant_defined_information, installment_information].hash
+      [client_reference_information, processing_information, issuer_information, payment_information, order_information, buyer_information, recipient_information, device_information, merchant_information, aggregator_information, consumer_authentication_information, point_of_sale_information, merchant_defined_information, installment_information, travel_information, health_care_information, promotion_information, token_information, risk_information, acquirer_information, recurring_payment_information].hash
     end
 
     # Builds the object from hash

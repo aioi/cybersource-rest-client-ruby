@@ -14,17 +14,21 @@ require 'date'
 
 module CyberSource
   class TssV2TransactionsPost201ResponseEmbeddedProcessingInformation
-    # Type of digital payment solution for the transaction. Possible Values:   - **visacheckout**: Visa Checkout. This value is required for Visa Checkout transactions. See Visa Checkout Using the SCMP API.  - **005**: Masterpass. This value is required for Masterpass transactions on OmniPay Direct. See \"Masterpass,\" page 153. 
+    # Type of digital payment solution for the transaction. Possible Values:   - `visacheckout`: Visa Checkout. This value is required for Visa Checkout transactions. For details, see `payment_solution` field description in [Visa Checkout Using the SCMP API.](https://apps.cybersource.com/library/documentation/dev_guides/VCO_SCMP_API/html/)  - `001`: Apple Pay.  - `004`: Cybersource In-App Solution.  - `005`: Masterpass. This value is required for Masterpass transactions on OmniPay Direct. For details, see \"Masterpass\" in the [Credit Card Services Using the SCMP API Guide.](https://apps.cybersource.com/library/documentation/dev_guides/CC_Svcs_SCMP_API/html/)  - `006`: Android Pay.  - `007`: Chase Pay.  - `008`: Samsung Pay.  - `012`: Google Pay. 
     attr_accessor :payment_solution
 
-    # The description for this field is not available.
+    # Payouts transaction type. Required for OCT transactions. This field is a pass-through, which means that CyberSource does not verify the value or modify it in any way before sending it to the processor. **Note** When the request includes this field, this value overrides the information in your CyberSource account.  For valid values, see the `invoiceHeader_businessApplicationID` field description in [Payouts Using the Simple Order API.](http://apps.cybersource.com/library/documentation/dev_guides/payouts_SO/Payouts_SO_API.pdf) 
     attr_accessor :business_application_id
+
+    # Type of transaction. Some payment card companies use this information when determining discount rates.  #### Used by **Authorization** Required payer authentication transactions; otherwise, optional. **Credit** Required for standalone credits on Chase Paymentech solutions; otherwise, optional. Only `internet`, `moto`, `install`, `recurring`, and `recurring_internet` are valid values.  #### Ingenico ePayments When you omit this field for Ingenico ePayments, the processor uses the default transaction type they have on file for you instead of the default value (listed in Appendix I, \"Commerce Indicators,\" on page 441.)  #### Payer Authentication Transactions For the possible values and requirements, see \"Payer Authentication,\" page 195.  #### Other Types of Transactions See Appendix I, \"Commerce Indicators,\" on page 441.  #### Card Present You must set this field to `retail`. This field is required for a card-present transaction. 
+    attr_accessor :commerce_indicator
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'payment_solution' => :'paymentSolution',
-        :'business_application_id' => :'businessApplicationId'
+        :'business_application_id' => :'businessApplicationId',
+        :'commerce_indicator' => :'commerceIndicator'
       }
     end
 
@@ -32,7 +36,8 @@ module CyberSource
     def self.swagger_types
       {
         :'payment_solution' => :'String',
-        :'business_application_id' => :'String'
+        :'business_application_id' => :'String',
+        :'commerce_indicator' => :'String'
       }
     end
 
@@ -51,6 +56,10 @@ module CyberSource
       if attributes.has_key?(:'businessApplicationId')
         self.business_application_id = attributes[:'businessApplicationId']
       end
+
+      if attributes.has_key?(:'commerceIndicator')
+        self.commerce_indicator = attributes[:'commerceIndicator']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -61,6 +70,10 @@ module CyberSource
         invalid_properties.push('invalid value for "payment_solution", the character length must be smaller than or equal to 12.')
       end
 
+      if !@commerce_indicator.nil? && @commerce_indicator.to_s.length > 20
+        invalid_properties.push('invalid value for "commerce_indicator", the character length must be smaller than or equal to 20.')
+      end
+
       invalid_properties
     end
 
@@ -68,6 +81,7 @@ module CyberSource
     # @return true if the model is valid
     def valid?
       return false if !@payment_solution.nil? && @payment_solution.to_s.length > 12
+      return false if !@commerce_indicator.nil? && @commerce_indicator.to_s.length > 20
       true
     end
 
@@ -81,13 +95,24 @@ module CyberSource
       @payment_solution = payment_solution
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] commerce_indicator Value to be assigned
+    def commerce_indicator=(commerce_indicator)
+      if !commerce_indicator.nil? && commerce_indicator.to_s.length > 20
+        fail ArgumentError, 'invalid value for "commerce_indicator", the character length must be smaller than or equal to 20.'
+      end
+
+      @commerce_indicator = commerce_indicator
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
           payment_solution == o.payment_solution &&
-          business_application_id == o.business_application_id
+          business_application_id == o.business_application_id &&
+          commerce_indicator == o.commerce_indicator
     end
 
     # @see the `==` method
@@ -99,7 +124,7 @@ module CyberSource
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [payment_solution, business_application_id].hash
+      [payment_solution, business_application_id, commerce_indicator].hash
     end
 
     # Builds the object from hash
